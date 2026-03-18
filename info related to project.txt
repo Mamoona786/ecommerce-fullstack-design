@@ -1,0 +1,502 @@
+Step 1:
+Set up the project environment and implement the static frontend for desktop and mobile views. 
+Tasks  
+1.	Set up the development environment:  
+○ Install and configure Node.js, React (frontend), and Express.js (backend). 
+2.	Clone the Figma design template into your project.  
+3.	Develop the following static pages for desktop and mobile views:  
+○ Home Page  
+○ Product Listing Page  
+○ Product Details Page  
+○ Cart Page  
+4. Ensure the designs are fully responsive using CSS Grid, Flexbox, or CSS framework like Bootstrap.  
+Deliverables  
+●	Responsive frontend for desktop and mobile views.  
+●	Pages match the Figma design.  
+●	Code committed to a GitHub repository named ecommerce-fullstack-design. 
+
+Step 2: 
+Set up the backend and connect it to the frontend for dynamic content rendering. 
+Tasks  
+1. Set up a MongoDB compass for storing product 
+data. 
+2. Create a Node.js and Express.js backend with:  
+○ API endpoints for CRUD operations (Create, Read, Update, Delete) for products.  
+○ A Products Collection with attributes:  
+■ id, name, price, image, description, category, stock.  
+3.	Populate the database with sample product data.  
+4.	Fetch data dynamically from the backend to render the following pages: 
+○ Home Page: Display featured products.  
+○ Product Listing Page: Fetch and display all products in a grid layout. 
+○ Product Details Page: Display details for a selected product.  
+○ Cart Page: Add products to a cart and display selected items.  
+5.	Implement a search bar to filter products by name or category.  
+Deliverables  
+●	Functional backend with APIs for product management.  
+●	Fully integrated frontend displaying dynamic data.  
+●	Code committed to the GitHub repository.  
+
+Step 3:
+Add essential eCommerce features, complete responsive testing, and deploy the application. 
+Tasks  
+1.	User Authentication:  
+	0	Use JWT or Firebase Auth for login and signup functionality.  ○ Restrict access to admin pages (e.g., product management).  
+2.	Cart Management:  
+	0	Enable users to add/remove products from the cart.  
+	○ Persist cart data locally using localStorage or a backend database. 
+3. Admin Panel:  
+	○ Create a simple admin interface to add/edit/delete products.  
+	○ Use protected routes for the admin panel.  
+4.	Responsive Testing:  
+	0	Test and fix any responsive issues for desktop and mobile views.  
+5.	Deployment:  
+	0	Deploy the project to Render, Vercel, or Heroku (choose one whichever you like)
+Deliverables  
+●	User authentication implemented and tested.  
+●	Cart functionality working for both desktop and mobile.  
+●	Admin panel integrated with CRUD operations.  
+●	Deployed application with live URL.  
+●	Final code committed to the GitHub repository.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This is my root folder directory:
+client/
+node_modules/
+server/
+shared-docs/
+package.json
+package-lock.json
+
+This is my client folder directory:
+client/
+│
+├── node_modules/
+├── public
+├── src/
+│   ├── assets/
+│   │   └── camera.jpg
+│   │   └── headset.jpg
+│   │   └── hero-electronics.jpg
+│   │   └── hero.png
+│   │   └── laptop.jpg
+│   │   └── phone.jpg
+│   │   └── watch.jpg
+│   │
+│   ├── components/
+│   │   ├── cart/
+│   │   ├── common/
+│   │   ├── layout/
+│   │   │     ├── Header.jsx
+│   │   │     ├── Navbar.jsx
+│   │   ├── home/
+│   │   │     ├── DealsSection.jsx
+│   │   │     ├── HeroSection.jsx
+│   │   └── product/
+│   │
+│   ├── context/
+│   │   ├── AuthContext.js
+│   │   └── CartContext.js
+│   │
+│   ├── hooks/
+│   │
+│   ├── pages/
+│   │   ├── Admin.jsx
+│   │   ├── Cart.jsx
+│   │   ├── Login.jsx
+│   │   ├── ProductDetails.jsx
+│   │   ├── Products.jsx
+│   │   ├── Signup.jsx
+│   │   └── Home.jsx
+│   │
+│   ├── routes/
+│   │   ├── AppRoutes.js
+│   │
+│   ├── services/
+│   │   ├── api.js
+│   │   └── productService.js
+│   │
+│   ├── styles/
+│   │   ├── home.css
+│   ├── utils/
+│   │
+│   ├── App.css
+│   ├── index.css
+│   ├── main.jsx
+│   └── App.jsx
+│
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── README.md
+├── vite.config.js
+├── package.json
+└── package-lock.json
+
+This is my server folder directory:
+server/
+│
+├── node_modules/
+├── src/
+│   ├── config/
+│   │   └── db.js
+│   │
+│   ├── controllers/
+│   │   ├── productController.js
+│   │   ├── authController.js
+│   │   └── cartController.js
+│   │
+│   ├── middleware/
+│   │   ├── errorMiddleware.js
+│   │   ├── authMiddleware.js
+│   │   └── adminMiddleware.js
+│   │
+│   ├── models/
+│   │   ├── Product.js
+│   │   ├── User.js
+│   │   └── Cart.js
+│   │
+│   ├── routes/
+│   │   ├── productRoutes.js
+│   │   ├── authRoutes.js
+│   │   └── cartRoutes.js
+│   │
+│   ├── utils/
+│   │   ├── generateToken.js
+│   │   └── seedProducts.js
+│   │
+│   ├── data/
+│   │   └── products.js
+│   │
+│   ├── app.js
+│   └── server.js
+│
+├── .env
+├── .gitignore
+├── package.json
+└── package-lock.json
+
+This is my shared docs folder directory:
+shared docs/
+│
+
+This is my directory till now. Let me share some files with you that will help you understand my ecommerce project folder structure till now. do not reply till then. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Further steps in order
+Phase 1 — Complete frontend static pages
+
+Do this first:
+
+Home page
+
+Product listing page
+
+Product details page
+
+Cart page
+
+Mobile responsive version
+
+Use:
+
+react-router-dom for page routing
+
+reusable components
+
+CSS modules / plain CSS / Bootstrap
+
+Suggested install in client:
+
+npm install react-router-dom axios
+Phase 2 — Build backend API
+
+After frontend static design is done:
+
+Create Express server
+
+Connect MongoDB
+
+Create Product model
+
+Make CRUD routes
+
+Test APIs in Postman
+
+Add sample product data
+
+API endpoints should be like:
+
+GET    /api/products
+GET    /api/products/:id
+POST   /api/products
+PUT    /api/products/:id
+DELETE /api/products/:id
+Phase 3 — Connect frontend to backend
+
+Then:
+
+Create client/src/services/api.js
+
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
+
+export default api;
+
+Create productService.js
+
+import api from "./api";
+
+export const getAllProducts = async () => {
+  const response = await api.get("/products");
+  return response.data;
+};
+
+export const getProductById = async (id) => {
+  const response = await api.get(`/products/${id}`);
+  return response.data;
+};
+
+Use useEffect() in pages to fetch products dynamically.
+
+Phase 4 — Search feature
+
+For search bar:
+
+frontend sends query
+
+backend filters by name/category
+
+Example:
+
+GET /api/products?search=shoe
+GET /api/products?category=men
+
+Later you can improve it to search both together.
+
+Phase 5 — Cart management
+
+Start simple:
+
+save cart in localStorage
+
+use React Context for global cart state
+
+Cart item example:
+
+{
+  productId,
+  name,
+  price,
+  image,
+  quantity
+}
+Phase 6 — Authentication
+
+For Step 3:
+
+Backend:
+
+User model
+
+signup/login routes
+
+bcrypt for password hashing
+
+JWT for login token
+
+Frontend:
+
+login page
+
+signup page
+
+protected routes
+
+admin-only page
+
+Install later in server:
+
+npm install jsonwebtoken bcryptjs
+Phase 7 — Admin panel
+
+Create admin pages for:
+
+add product
+
+edit product
+
+delete product
+
+maybe dashboard table
+
+Protect admin routes with:
+
+JWT middleware
+
+role check like isAdmin
+
+Phase 8 — Deployment
+
+Best combo:
+
+Frontend on Vercel
+
+Backend on Render
+
+MongoDB Atlas instead of only local Compass for production
+
+Vite provides standard production build/deploy guidance, and Compass is fine for local development, but deployment will need a hosted MongoDB URI rather than only a local database.
+
+Important note about MongoDB Compass
+
+Compass is mainly a GUI tool to view and manage MongoDB data.
+Your app will connect to MongoDB through the connection string in Mongoose, not directly “through Compass.” Mongoose handles the app connection, while Compass helps you inspect the database.
+
+So for local development:
+
+install MongoDB server
+
+use Compass to inspect collections
+
+use Mongoose in code to connect
+
+Best immediate next action for you
+
+Do these now in order:
+
+Create server/ with the minimal structure I gave
+
+Install backend dependencies
+
+Make Product model
+
+Make CRUD APIs
+
+Test in Postman
+
+Then connect your React frontend
+
+Commands to run now
+In server/
+npm init -y
+npm install express mongoose cors dotenv
+npm install --save-dev nodemon
+In client/
+npm install react-router-dom axios
+Very practical roadmap for your assignment
+Step 1 submission
+
+responsive static pages done
+
+proper routing done
+
+design matches Figma
+
+Step 2 submission
+
+MongoDB connected
+
+product CRUD done
+
+products shown dynamically
+
+search works
+
+cart works locally
+
+Step 3 submission
+
+login/signup done
+
+admin panel done
+
+protected routes done
+
+deployed project live
+
+My recommendation
+
+Do not build auth first.
+First finish:
+
+UI
+
+product API
+
+frontend-backend connection
+
+cart
+
+Then auth and admin.
+
+That will save you a lot of confusion.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Next best step is that I make this same page:
+fully responsive for mobile
+cleaner using separate CSS file
+broken into reusable components like Header, Navbar, HeroSection, DealsSection etc
+
+
+
+If you want, next I can give you an even more exact version with:
+real icons using react-icons,
+better hover effects,
+and exact pixel-perfect spacing like the image.
+
+100% pixel perfect match
+
+Our extra services 
+recommended items
