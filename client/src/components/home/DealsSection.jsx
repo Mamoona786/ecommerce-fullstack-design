@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import watchImg from "../../assets/watch.jpg";
-import laptopImg from "../../assets/laptop.jpg";
-import cameraImg from "../../assets/camera.jpg";
-import headsetImg from "../../assets/headset.jpg";
-import phoneImg from "../../assets/phone.jpg";
+import watchImg from "../../assets/watch.png";
+import laptopImg from "../../assets/laptop.png";
+import cameraImg from "../../assets/camera.png";
+import headsetImg from "../../assets/headset.png";
+import phoneImg from "../../assets/phone.png";
 
 const INITIAL_TIME = {
   days: 4,

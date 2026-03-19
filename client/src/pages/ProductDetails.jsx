@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import Header from "../components/layout/Header";
 import Navbar from "../components/layout/Navbar";
 import ProductsBreadcrumb from "../components/products/ProductsBreadcrumb";
-import NewsletterSection from "../components/common/NewsletterSection";
 import FooterSection from "../components/common/FooterSection";
+import ProductDetailsTabsSection from "../components/productDetails/ProductDetailsTabsSection";
+import RelatedProductsSection from "../components/productDetails/RelatedProductsSection";
 import "../styles/productDetails.css";
 
 import {
   FaStar,
   FaRegStar,
   FaRegCommentDots,
-  FaHeart,
   FaCheck,
-  FaChevronDown,
 } from "react-icons/fa";
 import {
   FiShoppingBag,
@@ -21,14 +20,13 @@ import {
   FiHeart,
 } from "react-icons/fi";
 
-// Replace these with your actual product images if you have shirt assets
-import mainProductImg from "../assets/watch.jpg";
-import thumb1 from "../assets/watch.jpg";
-import thumb2 from "../assets/laptop.jpg";
-import thumb3 from "../assets/camera.jpg";
-import thumb4 from "../assets/headset.jpg";
-import thumb5 from "../assets/phone.jpg";
-import thumb6 from "../assets/watch.jpg";
+import mainProductImg from "../assets/watch.png";
+import thumb1 from "../assets/shirt-1.png";
+import thumb2 from "../assets/shirt-2.png";
+import thumb3 from "../assets/shirt-3.png";
+import thumb4 from "../assets/shirt-4.png";
+import thumb5 from "../assets/shirt-5.png";
+import thumb6 from "../assets/shirt-6.png";
 
 function ProductDetails() {
   const thumbnails = [thumb1, thumb2, thumb3, thumb4, thumb5, thumb6];
@@ -177,20 +175,26 @@ function ProductDetails() {
                   </div>
                 </div>
 
-                <button className="supplier-primary-btn">Send inquiry</button>
-                <button className="supplier-secondary-btn">Seller’s profile</button>
+                <button className="supplier-primary-btn" type="button">
+                  Send inquiry
+                </button>
+                <button className="supplier-secondary-btn" type="button">
+                  Seller&apos;s profile
+                </button>
               </div>
 
-              <button className="save-later-btn">
+              <button className="save-later-btn" type="button">
                 <FiHeart />
                 <span>Save for later</span>
               </button>
             </aside>
           </section>
+
+          <ProductDetailsTabsSection />
+          <RelatedProductsSection />
         </div>
       </main>
 
-      <NewsletterSection />
       <FooterSection />
     </>
   );

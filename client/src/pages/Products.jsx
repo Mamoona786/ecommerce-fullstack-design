@@ -10,12 +10,12 @@ import ProductListCard from "../components/products/ProductListCard";
 import ProductsPagination from "../components/products/ProductsPagination";
 import "../styles/products.css";
 
-import kattleImg from "../assets/electric-kattle.jpg"
-import phoneImg from "../assets/phone.jpg";
-import phone2Img from "../assets/phone2.jpg";
-import headphonesImg from "../assets/headphones.jpg";
-import laptopImg from "../assets/laptop.jpg";
-import watchImg from "../assets/watch.jpg";
+import kattleImg from "../assets/electric-kattle.png"
+import phoneImg from "../assets/phone.png";
+import phone2Img from "../assets/phone2.png";
+import headphonesImg from "../assets/headphones.png";
+import laptopImg from "../assets/laptop.png";
+import watchImg from "../assets/watch.png";
 
 const productsData = [
   {
