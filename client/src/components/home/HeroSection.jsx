@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import heroImg from "../../assets/hero-electronics.png";
 import { FaUserCircle } from "react-icons/fa";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const categories = [
     "Automobiles",
     "Clothes and wear",
@@ -15,16 +17,27 @@ const HeroSection = () => {
     "More category",
   ];
 
+  const [activeCategory, setActiveCategory] = useState("Automobiles");
+
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+    navigate(`/products?category=${encodeURIComponent(category)}`);
+  };
+
   return (
     <section className="hero-section">
       <div className="categories-box">
-        {categories.map((category, index) => (
-          <div
+        {categories.map((category) => (
+          <button
             key={category}
-            className={`category-item ${index === 0 ? "category-item-active" : ""}`}
+            type="button"
+            className={`category-item ${
+              activeCategory === category ? "category-item-active" : ""
+            }`}
+            onClick={() => handleCategoryClick(category)}
           >
             {category}
-          </div>
+          </button>
         ))}
       </div>
 
@@ -34,7 +47,13 @@ const HeroSection = () => {
         <div className="banner-overlay">
           <p className="banner-small-text">Latest trending</p>
           <h1 className="banner-title">Electronic items</h1>
-          <button className="learn-more-btn">Learn more</button>
+          <button
+            className="learn-more-btn"
+            type="button"
+            onClick={() => navigate("/products?category=Computer%20and%20tech")}
+          >
+            Learn more
+          </button>
         </div>
       </div>
 
@@ -50,25 +69,45 @@ const HeroSection = () => {
             </div>
           </div>
 
-          <button className="join-btn">Join now</button>
-          <button className="login-btn">Log in</button>
+          <button
+            className="join-btn"
+            type="button"
+            onClick={() => navigate("/signup")}
+          >
+            Join now
+          </button>
+          <button
+            className="login-btn"
+            type="button"
+            onClick={() => navigate("/login")}
+          >
+            Log in
+          </button>
         </div>
 
-        <div className="orange-card">
+        <button
+          type="button"
+          className="orange-card hero-side-card-btn"
+          onClick={() => navigate("/products?promo=new-supplier")}
+        >
           <div>
             Get US $10 off <br />
             with a new <br />
             supplier
           </div>
-        </div>
+        </button>
 
-        <div className="teal-card">
+        <button
+          type="button"
+          className="teal-card hero-side-card-btn"
+          onClick={() => navigate("/products?promo=quotes")}
+        >
           <div>
             Send quotes with <br />
             supplier <br />
             preferences
           </div>
-        </div>
+        </button>
       </div>
     </section>
   );

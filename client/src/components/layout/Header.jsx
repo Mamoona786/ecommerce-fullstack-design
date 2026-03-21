@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaUser,
   FaRegCommentDots,
@@ -10,52 +11,84 @@ import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoChevronDownOutline } from "react-icons/io5";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const [searchText, setSearchText] = useState("");
+  const [category, setCategory] = useState("All category");
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+
+    if (searchText.trim()) params.set("search", searchText.trim());
+    if (category !== "All category") params.set("category", category);
+
+    navigate(`/products${params.toString() ? `?${params.toString()}` : ""}`);
+  };
+
   return (
     <header className="header">
       <div className="container header-inner">
-        <div className="logo-wrapper">
+        <Link to="/" className="logo-wrapper">
           <div className="logo-icon">
             <HiOutlineShoppingBag />
           </div>
           <div className="logo-text">Brand</div>
-        </div>
+        </Link>
 
-        <div className="search-wrapper">
-          <input type="text" placeholder="Search" className="search-input" />
+        <form className="search-wrapper" onSubmit={handleSearch}>
+          <input
+            type="text"
+            placeholder="Search"
+            className="search-input"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
 
           <div className="search-select-wrapper">
-            <select className="search-select">
+            <select
+              className="search-select"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
               <option>All category</option>
+              <option>Automobiles</option>
+              <option>Clothes and wear</option>
+              <option>Home interiors</option>
+              <option>Computer and tech</option>
+              <option>Tools, equipments</option>
+              <option>Sports and outdoor</option>
+              <option>Animal and pets</option>
+              <option>Machinery tools</option>
             </select>
             <IoChevronDownOutline className="select-chevron" />
           </div>
 
-          <button className="search-button">
+          <button className="search-button" type="submit">
             <FaSearch className="search-btn-icon" />
             Search
           </button>
-        </div>
+        </form>
 
         <div className="top-icons">
-          <div className="icon-item">
+          <Link to="/login" className="icon-item">
             <FaUser className="icon" />
             <span className="icon-label">Profile</span>
-          </div>
+          </Link>
 
-          <div className="icon-item">
+          <button className="icon-item" type="button">
             <FaRegCommentDots className="icon" />
             <span className="icon-label">Message</span>
-          </div>
+          </button>
 
-          <div className="icon-item">
+          <button className="icon-item" type="button">
             <FaRegHeart className="icon" />
             <span className="icon-label">Orders</span>
-          </div>
+          </button>
 
-          <div className="icon-item">
+          <Link to="/cart" className="icon-item">
             <FaShoppingCart className="icon" />
             <span className="icon-label">My cart</span>
-          </div>
+          </Link>
         </div>
       </div>
     </header>

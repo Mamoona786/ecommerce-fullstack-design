@@ -1847,3 +1847,211 @@ body {
     font-size: 12px;
   }
 }
+
+
+
+/* ===== Functional enhancements without changing layout ===== */
+
+.logo-wrapper,
+.icon-item,
+.footer-brand,
+.footer-link,
+.footer-social,
+.store-badge,
+.supplier-item-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-button-reset,
+.category-item,
+.hero-side-card-btn,
+.product-card-button,
+.showcase-card-button,
+.recommended-card-button,
+.extra-service-card-button,
+.footer-language {
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.category-item,
+.nav-link,
+.icon-item,
+.footer-link,
+.footer-social,
+.store-badge,
+.footer-language,
+.search-button,
+.learn-more-btn,
+.join-btn,
+.login-btn,
+.category-showcase-button,
+.quote-submit-btn,
+.newsletter-btn,
+.product-discount-banner-btn,
+.cart-back-btn,
+.cart-remove-all-btn,
+.cart-coupon-btn,
+.cart-checkout-btn {
+  transition: all 0.2s ease;
+}
+
+.icon-item:hover,
+.nav-link:hover,
+.footer-link:hover {
+  opacity: 0.8;
+}
+
+.search-button:hover,
+.learn-more-btn:hover,
+.join-btn:hover,
+.login-btn:hover,
+.category-showcase-button:hover,
+.quote-submit-btn:hover,
+.newsletter-btn:hover,
+.product-discount-banner-btn:hover,
+.cart-coupon-btn:hover,
+.cart-checkout-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.97);
+}
+
+.product-card-button,
+.showcase-card-button,
+.recommended-card-button,
+.extra-service-card-button,
+.hero-side-card-btn {
+  width: 100%;
+}
+
+.product-card-button:hover,
+.showcase-card-button:hover,
+.recommended-card-button:hover,
+.extra-service-card-button:hover {
+  transform: translateY(-2px);
+}
+
+.recommended-card-button:hover,
+.showcase-card-button:hover,
+.product-card-button:hover,
+.extra-service-card-button:hover,
+.supplier-item-link:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.category-item:hover {
+  background: #f3f7ff;
+}
+
+.banner-box:hover .banner-image,
+.showcase-card-button:hover .showcase-card-image,
+.recommended-card-button:hover .recommended-image,
+.product-card-button:hover .product-image,
+.extra-service-card-button:hover .extra-service-image {
+  transform: scale(1.03);
+}
+
+.banner-image,
+.showcase-card-image,
+.recommended-image,
+.product-image,
+.extra-service-image {
+  transition: transform 0.25s ease;
+}
+
+.nav-dropdown,
+.footer-language-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-menu,
+.footer-language-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  min-width: 170px;
+  background: #fff;
+  border: 1px solid #dde1e6;
+  border-radius: 8px;
+  box-shadow: 0 12px 30px rgba(56, 56, 56, 0.12);
+  z-index: 30;
+  padding: 8px 0;
+}
+
+.nav-dropdown-menu-right {
+  right: 0;
+}
+
+.nav-dropdown-menu button,
+.footer-language-menu button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 10px 14px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.nav-dropdown-menu button:hover,
+.footer-language-menu button:hover {
+  background: #f5f8ff;
+}
+
+.footer-language {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-language-menu {
+  right: 0;
+}
+
+.supplier-item-link {
+  display: flex;
+}
+
+.logo-wrapper:hover .logo-icon,
+.footer-brand:hover .footer-brand-icon {
+  transform: translateY(-1px);
+}
+
+.logo-icon,
+.footer-brand-icon {
+  transition: transform 0.2s ease;
+}
+
+.search-wrapper {
+  margin-bottom: 0;
+}
+
+.categories-box .category-item {
+  display: block;
+  width: 100%;
+}
+
+.hero-side-card-btn {
+  display: block;
+}
+
+.showcase-card-button,
+.recommended-card-button,
+.extra-service-card-button,
+.product-card-button {
+  border-radius: inherit;
+}
+
+.footer-social:hover {
+  transform: translateY(-2px);
+}
+
+.store-badge:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}

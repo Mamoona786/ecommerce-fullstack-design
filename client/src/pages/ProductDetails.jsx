@@ -3,6 +3,7 @@ import Header from "../components/layout/Header";
 import Navbar from "../components/layout/Navbar";
 import ProductsBreadcrumb from "../components/products/ProductsBreadcrumb";
 import FooterSection from "../components/common/FooterSection";
+import ProductDiscountBanner from "../components/common/ProductDiscountBanner";
 import ProductDetailsTabsSection from "../components/productDetails/ProductDetailsTabsSection";
 import RelatedProductsSection from "../components/productDetails/RelatedProductsSection";
 import "../styles/productDetails.css";
@@ -192,6 +193,7 @@ function ProductDetails() {
 
           <ProductDetailsTabsSection />
           <RelatedProductsSection />
+          <ProductDiscountBanner />
         </div>
       </main>
 

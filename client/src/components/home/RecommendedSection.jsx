@@ -1,13 +1,21 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const RecommendedSection = ({ items }) => {
+  const navigate = useNavigate();
+
   return (
     <section className="recommended-section">
       <h2 className="recommended-heading">Recommended items</h2>
 
       <div className="recommended-grid">
         {items.map((item, index) => (
-          <article key={`${item.title}-${index}`} className="recommended-card">
+          <button
+            key={`${item.title}-${index}`}
+            type="button"
+            className="recommended-card recommended-card-button"
+            onClick={() => navigate(`/products/${item.id}`)}
+          >
             <div className="recommended-image-wrap">
               <img
                 src={item.image}
@@ -21,7 +29,7 @@ const RecommendedSection = ({ items }) => {
               <p className="recommended-title">{item.title}</p>
               <p className="recommended-subtitle">{item.subtitle}</p>
             </div>
-          </article>
+          </button>
         ))}
       </div>
     </section>

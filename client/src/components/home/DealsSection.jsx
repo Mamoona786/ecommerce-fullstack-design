@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import watchImg from "../../assets/watch.png";
 import laptopImg from "../../assets/laptop.png";
 import cameraImg from "../../assets/camera.png";
@@ -24,14 +25,15 @@ const getInitialSeconds = () => {
 const formatTime = (value) => String(value).padStart(2, "0");
 
 const DealsSection = () => {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(getInitialSeconds());
 
   const dealProducts = [
-    { name: "Smart watches", discount: "-25%", image: watchImg },
-    { name: "Laptops", discount: "-15%", image: laptopImg },
-    { name: "GoPro cameras", discount: "-40%", image: cameraImg },
-    { name: "Headphones", discount: "-25%", image: headsetImg },
-    { name: "Canon cameras", discount: "-25%", image: phoneImg },
+    { id: 1, name: "Smart watches", discount: "-25%", image: watchImg },
+    { id: 2, name: "Laptops", discount: "-15%", image: laptopImg },
+    { id: 3, name: "GoPro cameras", discount: "-40%", image: cameraImg },
+    { id: 4, name: "Headphones", discount: "-25%", image: headsetImg },
+    { id: 5, name: "Canon cameras", discount: "-25%", image: phoneImg },
   ];
 
   useEffect(() => {
@@ -80,13 +82,18 @@ const DealsSection = () => {
       </div>
 
       {dealProducts.map((product) => (
-        <div key={product.name} className="product-card">
+        <button
+          key={product.id}
+          type="button"
+          className="product-card product-card-button"
+          onClick={() => navigate(`/products?deal=${encodeURIComponent(product.name)}`)}
+        >
           <div className="product-image-wrap">
             <img src={product.image} alt={product.name} className="product-image" />
           </div>
           <p className="product-name">{product.name}</p>
           <span className="discount-badge">{product.discount}</span>
-        </div>
+        </button>
       ))}
     </section>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { FiSearch, FiPackage } from "react-icons/fi";
 import { HiOutlinePaperAirplane } from "react-icons/hi2";
 import { BsShieldCheck } from "react-icons/bs";
@@ -19,6 +20,7 @@ const services = [
     ),
     image: serviceWarehouseImg,
     icon: <FiSearch />,
+    link: "/products?service=industry-hubs",
   },
   {
     title: (
@@ -30,6 +32,7 @@ const services = [
     ),
     image: serviceCustomizeImg,
     icon: <FiPackage />,
+    link: "/products?service=customize-products",
   },
   {
     title: (
@@ -41,6 +44,7 @@ const services = [
     ),
     image: serviceShippingImg,
     icon: <HiOutlinePaperAirplane />,
+    link: "/products?service=shipping",
   },
   {
     title: (
@@ -52,10 +56,13 @@ const services = [
     ),
     image: serviceInspectionImg,
     icon: <BsShieldCheck />,
+    link: "/products?service=inspection",
   },
 ];
 
 const ExtraServicesSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="extra-services-section">
       <div className="container">
@@ -63,7 +70,12 @@ const ExtraServicesSection = () => {
 
         <div className="extra-services-grid">
           {services.map((service, index) => (
-            <article key={index} className="extra-service-card">
+            <button
+              key={index}
+              type="button"
+              className="extra-service-card extra-service-card-button"
+              onClick={() => navigate(service.link)}
+            >
               <div className="extra-service-image-wrap">
                 <img
                   src={service.image}
@@ -75,11 +87,9 @@ const ExtraServicesSection = () => {
               <div className="extra-service-body">
                 <h3 className="extra-service-title">{service.title}</h3>
 
-                <div className="extra-service-icon">
-                  {service.icon}
-                </div>
+                <div className="extra-service-icon">{service.icon}</div>
               </div>
-            </article>
+            </button>
           ))}
         </div>
       </div>

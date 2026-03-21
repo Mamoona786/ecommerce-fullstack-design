@@ -77,7 +77,7 @@ Deliverables
 
 
 
-This is my root folder directory:
+This is my e-commerce project root folder directory:
 client/
 node_modules/
 server/
@@ -92,24 +92,41 @@ client/
 ├── public
 ├── src/
 │   ├── assets/
-│   │   └── camera.jpg
-│   │   └── headset.jpg
-│   │   └── hero-electronics.jpg
-│   │   └── hero.png
-│   │   └── laptop.jpg
-│   │   └── phone.jpg
-│   │   └── watch.jpg
 │   │
 │   ├── components/
 │   │   ├── cart/
+│   │   │     ├── CartBenefitsRow.jsx
+│   │   │     ├── CartCouponCard.jsx
+│   │   │     ├── CartItem.jsx
+│   │   │     ├── CartSummaryCard.jsx
+│   │   │     ├── SavedForLaterSection.jsx
+│   │   │
 │   │   ├── common/
+│   │   │     ├── FooterSection.jsx
+│   │   │     ├── NewsletterSection.jsx
+│   │   │     ├── ProductDiscountBanner.jsx
+│   │   │ 
 │   │   ├── layout/
 │   │   │     ├── Header.jsx
 │   │   │     ├── Navbar.jsx
+│   │   │     
 │   │   ├── home/
+│   │   │     ├── CategoryShowcaseSection.jsx
+│   │   │     ├── ExtraServicesSection.jsx
+│   │   │     ├── QuoteSection.jsx
+│   │   │     ├── RecommendedSection.jsx
+│   │   │     ├── SuppliersSection.jsx
 │   │   │     ├── DealsSection.jsx
 │   │   │     ├── HeroSection.jsx
-│   │   └── product/
+│   │   └── productDetails/
+│   │   │     ├── ProductDetailsTabsSection.jsx
+│   │   │     ├── RelatedProductsSection.jsx
+│   │   └── products/
+│   │   │     ├── ProductListCard.jsx
+│   │   │     ├── ProductsBreadcrumb.jsx
+│   │   │     ├── ProductsPagination.jsx
+│   │   │     ├── ProductsSidebar.jsx
+│   │   │     ├── ProductsToolbar.jsx
 │   │
 │   ├── context/
 │   │   ├── AuthContext.js
@@ -135,6 +152,10 @@ client/
 │   │
 │   ├── styles/
 │   │   ├── home.css
+│   │   ├── productDetails.css
+│   │   ├── products.css
+│   │   ├── cart.css
+│   │   
 │   ├── utils/
 │   │
 │   ├── App.css
@@ -500,3 +521,57 @@ and exact pixel-perfect spacing like the image.
 
 Our extra services 
 recommended items
+
+Apply button text in coupon card not displaying
+Remove all button styling not applied properly
+
+
+
+
+
+
+
+
+
+React Context API (Basic Global State)
+👉 Built-in React solution
+When to use:
+Medium apps
+Auth, theme, user data
+Structure:
+src/
+ ├── context/
+ │    ├── AuthContext.jsx
+ │    ├── ThemeContext.jsx
+ ├── providers/
+ │    ├── AppProvider.jsx
+ ├── components/
+ ├── pages/
+ ├── hooks/
+ │    ├── useAuth.js
+ ├── App.jsx
+Pattern:
+Create context
+Wrap app with provider
+Use custom hooks
+✔️ Avoids prop drilling
+❌ Re-renders can increase
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+I want you to update my Home.jsx file and add dropdowns wherever necessary, hover effects wherever necessary, and page navigation wherever necessary, and also new components or items wherever necessary. But make sure that the overall design of the Home page should not be changed. The theme and design of my home page should remain 100% pixel perfect same as shown in the picture attached. You can also make new components or js files wherever needed in order to make my home page fully functional

@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiMail } from "react-icons/fi";
 
 const NewsletterSection = () => {
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    alert("Subscribed successfully!");
+    setEmail("");
+  };
+
   return (
     <section className="newsletter-section">
       <div className="container">
@@ -11,13 +20,15 @@ const NewsletterSection = () => {
             Get daily news on upcoming offers from many suppliers all over the world
           </p>
 
-          <form className="newsletter-form">
+          <form className="newsletter-form" onSubmit={handleSubmit}>
             <div className="newsletter-input-wrap">
               <FiMail className="newsletter-input-icon" />
               <input
                 type="email"
                 className="newsletter-input"
                 placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 

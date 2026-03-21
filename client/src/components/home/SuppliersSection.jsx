@@ -31,7 +31,13 @@ const SuppliersSection = () => {
 
         <div className="suppliers-grid">
           {suppliers.map((supplier, index) => (
-            <div key={`${supplier.country}-${index}`} className="supplier-item">
+            <a
+              key={`${supplier.country}-${index}`}
+              className="supplier-item supplier-item-link"
+              href={`https://${supplier.site}`}
+              target="_blank"
+              rel="noreferrer"
+            >
               <div className="supplier-flag-wrap">
                 <img
                   src={supplier.flag}
@@ -44,7 +50,7 @@ const SuppliersSection = () => {
                 <p className="supplier-country">{supplier.country}</p>
                 <p className="supplier-site">{supplier.site}</p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

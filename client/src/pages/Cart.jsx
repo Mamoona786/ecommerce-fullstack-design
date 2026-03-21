@@ -5,6 +5,10 @@ import Header from "../components/layout/Header";
 import CartItem from "../components/cart/CartItem";
 import CartCouponCard from "../components/cart/CartCouponCard";
 import CartSummaryCard from "../components/cart/CartSummaryCard";
+import CartBenefitsRow from "../components/cart/CartBenefitsRow";
+import SavedForLaterSection from "../components/cart/SavedForLaterSection";
+import ProductDiscountBanner from "../components/common/ProductDiscountBanner";
+import FooterSection from "../components/common/FooterSection";
 import "../styles/cart.css";
 
 import tshirtImg from "../assets/recommended-tshirt.png";
@@ -130,8 +134,13 @@ function Cart() {
               <CartSummaryCard pricing={pricing} />
             </aside>
           </div>
+
+          <CartBenefitsRow />
+          <SavedForLaterSection />
+          <ProductDiscountBanner />
         </div>
       </main>
+      <FooterSection />
     </div>
   );
 }
