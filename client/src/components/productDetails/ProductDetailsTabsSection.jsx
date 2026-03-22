@@ -1,64 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiCheck } from "react-icons/fi";
-
-import blazerImg from "../../assets/laptop.png";
-import shirtImg from "../../assets/phone.png";
-import jacketImg from "../../assets/headphones.png";
-import blueShirtImg from "../../assets/camera.png";
-import bagImg from "../../assets/watch.png";
 
 const tabs = ["Description", "Reviews", "Shipping", "About seller"];
 
-const youMayLikeItems = [
-  {
-    id: 1,
-    image: blazerImg,
-    title: "Men Blazers Sets Elegant Formal",
-    price: "$7.00 - $99.50",
-  },
-  {
-    id: 2,
-    image: shirtImg,
-    title: "Men Shirt Sleeve Polo Contrast",
-    price: "$7.00 - $99.50",
-  },
-  {
-    id: 3,
-    image: jacketImg,
-    title: "Apple Watch Series Space Gray",
-    price: "$7.00 - $99.50",
-  },
-  {
-    id: 4,
-    image: blueShirtImg,
-    title: "Basketball Crew Socks Long Stuff",
-    price: "$7.00 - $99.50",
-  },
-  {
-    id: 5,
-    image: bagImg,
-    title: "New Summer Men's castrol T-Shirts",
-    price: "$7.00 - $99.50",
-  },
-];
-
-const specRows = [
-  { label: "Model", value: "#8786867" },
-  { label: "Style", value: "Classic style" },
-  { label: "Certificate", value: "ISO-898921212" },
-  { label: "Size", value: "34mm x 450mm x 19mm" },
-  { label: "Memory", value: "36GB RAM" },
-];
-
-const features = [
-  "Some great feature name here",
-  "Lorem ipsum dolor sit amet, consectetur",
-  "Duis aute irure dolor in reprehenderit",
-  "Some great feature name here",
-];
-
-function ProductDetailsTabsSection() {
+function ProductDetailsTabsSection({ product, youMayLikeItems = [] }) {
   const [activeTab, setActiveTab] = useState("Description");
+  const navigate = useNavigate();
 
   return (
     <section className="product-details-lower-section">
@@ -83,23 +31,11 @@ function ProductDetailsTabsSection() {
             {activeTab === "Description" && (
               <>
                 <p className="product-details-description-text">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet,
-                  consectetur adipisicing elit, sed do eiusmod tempor incididunt
-                  ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                  <br />
-                  Quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                  ea commodo consequat. Duis aute irure dolor in reprehenderit
-                  in voluptate velit esse cillum dolore eu fugiat nulla
-                  pariatur.
+                  {product?.shortDescription}
                 </p>
 
                 <div className="product-details-spec-table">
-                  {specRows.map((row) => (
+                  {(product?.detailSpecRows || []).map((row) => (
                     <div className="product-details-spec-table-row" key={row.label}>
                       <div className="product-details-spec-table-label">
                         {row.label}
@@ -112,7 +48,7 @@ function ProductDetailsTabsSection() {
                 </div>
 
                 <div className="product-details-feature-list">
-                  {features.map((feature, index) => (
+                  {(product?.features || []).map((feature, index) => (
                     <div className="product-details-feature-item" key={index}>
                       <span className="product-details-feature-icon">
                         <FiCheck />
@@ -126,19 +62,19 @@ function ProductDetailsTabsSection() {
 
             {activeTab === "Reviews" && (
               <div className="product-details-tab-placeholder">
-                Reviews content goes here
+                {product?.reviews || 0} reviews available for this product.
               </div>
             )}
 
             {activeTab === "Shipping" && (
               <div className="product-details-tab-placeholder">
-                Shipping information goes here
+                {product?.shipping || "Worldwide shipping"}.
               </div>
             )}
 
             {activeTab === "About seller" && (
               <div className="product-details-tab-placeholder">
-                Seller information goes here
+                Seller: {product?.seller?.name} — {product?.seller?.location}
               </div>
             )}
           </div>
@@ -154,6 +90,8 @@ function ProductDetailsTabsSection() {
               <article
                 className="product-details-you-may-like-item"
                 key={item.id}
+                onClick={() => navigate(`/products/${item.id}`)}
+                style={{ cursor: "pointer" }}
               >
                 <div className="product-details-you-may-like-image-wrap">
                   <img

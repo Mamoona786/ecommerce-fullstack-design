@@ -865,3 +865,29 @@
     padding: 0 18px;
   }
 }
+
+
+
+.product-thumb-btn,
+.related-product-item,
+.product-details-you-may-like-item,
+.supplier-primary-btn,
+.supplier-secondary-btn,
+.save-later-btn {
+  transition: all 0.2s ease;
+}
+
+.product-thumb-btn:hover {
+  border-color: #0d6efd;
+}
+
+.related-product-item:hover,
+.product-details-you-may-like-item:hover {
+  transform: translateY(-2px);
+}
+
+.supplier-primary-btn:hover,
+.supplier-secondary-btn:hover,
+.save-later-btn:hover {
+  filter: brightness(0.98);
+}
