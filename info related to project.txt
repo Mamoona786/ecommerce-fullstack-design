@@ -894,3 +894,13 @@ Then push:
 git push origin main
 
 Now all 3 branches will contain that backend folder.
+
+
+
+
+
+
+Think of it like this (very easy)
+dev → 👨‍💻 work zone (frontend + backend)
+staging → 🧪 testing zone
+main → 🚀 live / production
