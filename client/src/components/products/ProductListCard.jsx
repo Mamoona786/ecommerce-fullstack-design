@@ -6,7 +6,7 @@ const ProductListCard = ({ product }) => {
   return (
     <article className="product-list-card">
       <Link
-        to={`/products/${product.id}`}
+        to={`/products/${product._id}`}
         className="product-list-image-wrap"
       >
         <img
@@ -18,7 +18,7 @@ const ProductListCard = ({ product }) => {
 
       <div className="product-list-body">
         <div className="product-list-top">
-          <Link to={`/products/${product.id}`} className="product-list-title-link">
+          <Link to={`/products/${product._id}`} className="product-list-title-link">
             <h3 className="product-list-title">{product.title}</h3>
           </Link>
 
@@ -52,7 +52,7 @@ const ProductListCard = ({ product }) => {
 
         <p className="product-description">{product.description}</p>
 
-        <Link to={`/products/${product.id}`} className="product-details-link">
+        <Link to={`/products/${product._id}`} className="product-details-link">
           View details
         </Link>
       </div>
