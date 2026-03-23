@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FaUser,
@@ -12,8 +12,20 @@ import { IoChevronDownOutline } from "react-icons/io5";
 
 const Header = () => {
   const navigate = useNavigate();
+
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState("All category");
+
+  // ✅ user state
+  const [user, setUser] = useState(null);
+
+  // ✅ check login on mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -23,6 +35,14 @@ const Header = () => {
     if (category !== "All category") params.set("category", category);
 
     navigate(`/products${params.toString() ? `?${params.toString()}` : ""}`);
+  };
+
+  // ✅ logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
   };
 
   return (
@@ -70,10 +90,34 @@ const Header = () => {
         </form>
 
         <div className="top-icons">
-          <Link to="/login" className="icon-item">
-            <FaUser className="icon" />
-            <span className="icon-label">Profile</span>
-          </Link>
+          {/* ✅ CONDITIONAL AUTH UI */}
+          {user ? (
+            <>
+              <button
+                className="icon-item"
+                type="button"
+                onClick={() => navigate("/profile")}
+              >
+                <FaUser className="icon" />
+                <span className="icon-label">
+                  {user.username || "Profile"}
+                </span>
+              </button>
+
+              <button
+                className="icon-item"
+                type="button"
+                onClick={handleLogout}
+              >
+                <span className="icon-label">Logout</span>
+              </button>
+            </>
+          ) : (
+            <Link to="/login" className="icon-item">
+              <FaUser className="icon" />
+              <span className="icon-label">Login</span>
+            </Link>
+          )}
 
           <button className="icon-item" type="button">
             <FaRegCommentDots className="icon" />

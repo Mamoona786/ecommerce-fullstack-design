@@ -1,13 +1,49 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
+import { Link, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import "../styles/login.css";
 
-import loginHeroImg from "../assets/login-hero.png"; // save the attached image-right-side artwork as this file
+import loginHeroImg from "../assets/login-hero.png";
+import { loginUser } from "../services/authService";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      setError("");
+
+      const data = await loginUser(formData);
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="login-page">
@@ -25,13 +61,16 @@ const Login = () => {
               </p>
             </div>
 
-            <form className="login-form">
+            <form className="login-form" onSubmit={handleSubmit}>
               <div className="login-field">
                 <label htmlFor="email">Enter your email address</label>
                 <input
                   id="email"
                   type="email"
                   placeholder="name@example.com"
+                  autoComplete="email"
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -43,6 +82,9 @@ const Login = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="atleast 8 characters"
+                    autoComplete="current-password"
+                    value={formData.password}
+                    onChange={handleChange}
                   />
                   <button
                     type="button"
@@ -61,13 +103,16 @@ const Login = () => {
                 </button>
               </div>
 
-              <button type="submit" className="login-btn">
-                Log in
+              {error && (
+                <p style={{ color: "red", marginBottom: "12px" }}>{error}</p>
+              )}
+
+              <button type="submit" className="login-btn" disabled={loading}>
+                {loading ? "Logging in..." : "Log in"}
               </button>
 
               <p className="register-text">
-                Don&apos;t have an account?{" "}
-                <Link to="/register">Register</Link>
+                Don&apos;t have an account? <Link to="/register">Register</Link>
               </p>
             </form>
           </div>
