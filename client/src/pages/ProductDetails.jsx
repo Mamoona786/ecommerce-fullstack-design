@@ -22,8 +22,7 @@ import {
   FiHeart,
 } from "react-icons/fi";
 
-import { getResolvedProductById } from "../services/productService";
-import { getProductsByIds } from "../data/productCatalog";
+import { getProductById } from "../services/productService";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -40,27 +39,31 @@ function ProductDetails() {
       try {
         setLoading(true);
         setError("");
-        const data = await getResolvedProductById(id);
+
+        const data = await getProductById(id);
         setProduct(data);
         setSelectedImage(data?.image || "");
       } catch (err) {
+        console.error("Failed to fetch product:", err);
         setError("Product not found.");
       } finally {
         setLoading(false);
       }
     };
 
-    loadProduct();
+    if (id) {
+      loadProduct();
+    }
   }, [id]);
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
-    return getProductsByIds(product.relatedIds);
+    return product.relatedIds || [];
   }, [product]);
 
   const youMayLikeItems = useMemo(() => {
     if (!product) return [];
-    return getProductsByIds(product.youMayLikeIds);
+    return product.youMayLikeIds || [];
   }, [product]);
 
   if (loading) {
@@ -228,6 +231,7 @@ function ProductDetails() {
                 <button className="supplier-primary-btn" type="button">
                   Send inquiry
                 </button>
+
                 <button
                   className="supplier-secondary-btn"
                   type="button"

@@ -72,7 +72,10 @@ const sampleProducts = [
     thumbnails: [
       "/src/assets/shirt-1.png",
       "/src/assets/shirt-2.png",
-      "/src/assets/shirt-3.png"
+      "/src/assets/shirt-3.png",
+      "/src/assets/shirt-4.png",
+      "/src/assets/shirt-5.png",
+      "/src/assets/shirt-6.png"
     ],
     price: "$998.00",
     category: "Electronics",
@@ -93,7 +96,10 @@ const sampleProducts = [
     thumbnails: [
       "/src/assets/shirt-1.png",
       "/src/assets/shirt-2.png",
-      "/src/assets/shirt-3.png"
+      "/src/assets/shirt-3.png",
+      "/src/assets/shirt-4.png",
+      "/src/assets/shirt-5.png",
+      "/src/assets/shirt-6.png"
     ],
     price: "$998.00",
     category: "Electronics",

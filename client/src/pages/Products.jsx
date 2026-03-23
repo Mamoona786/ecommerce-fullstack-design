@@ -19,6 +19,8 @@ function Products() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
+        setError("");
         const data = await getAllProducts();
         setProducts(data);
       } catch (err) {
