@@ -9,9 +9,9 @@ const RecommendedSection = ({ items }) => {
       <h2 className="recommended-heading">Recommended items</h2>
 
       <div className="recommended-grid">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <button
-            key={`${item.title}-${index}`}
+            key={item.id}
             type="button"
             className="recommended-card recommended-card-button"
             onClick={() => navigate(`/products/${item.id}`)}

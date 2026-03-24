@@ -30,9 +30,9 @@ const CategoryShowcaseSection = ({
       </div>
 
       <div className="category-showcase-grid">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <button
-            key={`${item.name}-${index}`}
+            key={item.id}
             type="button"
             className="showcase-card showcase-card-button"
             onClick={() => navigate(`/products/${item.id}`)}
