@@ -10,15 +10,15 @@ import React from "react";
 // import chinaFlag from "../../assets/flag-cn.jpg";
 // import ukFlag from "../../assets/flag-gb.jpg";
 
-const uaeFlag = "/flag-ae.jpg";
-const australiaFlag = "/flag-au.jpg";
-const usaFlag = "/flag-us.jpg";
-const russiaFlag = "/flag-ru.jpg";
-const italyFlag = "/flag-it.jpg";
-const denmarkFlag = "/flag-dk.jpg";
-const franceFlag = "/flag-fr.jpg";
-const chinaFlag = "/flag-cn.jpg";
-const ukFlag = "/flag-gb.jpg";
+const uaeFlag = "/flag-ae.png";
+const australiaFlag = "/flag-au.png";
+const usaFlag = "/flag-us.png";
+const russiaFlag = "/flag-ru.png";
+const italyFlag = "/flag-it.png";
+const denmarkFlag = "/flag-dk.png";
+const franceFlag = "/flag-fr.png";
+const chinaFlag = "/flag-cn.png";
+const ukFlag = "/flag-gb.png";
 
 const suppliers = [
   { flag: uaeFlag, country: "Arabic Emirates", site: "shopname.ae" },

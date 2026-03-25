@@ -11,14 +11,10 @@ import SuppliersSection from "../components/home/SuppliersSection";
 import NewsletterSection from "../components/common/NewsletterSection";
 import FooterSection from "../components/common/FooterSection";
 import "../styles/home.css";
-
-// import heroIndoorImg from "../assets/homeIndoor.png";
-// import heroElectronicsImg from "../assets/electronics-gadgets.png";
+import { getAllProducts } from "../services/productService";
 
 const heroIndoorImg = "/homeIndoor.png";
 const heroElectronicsImg = "/electronics-gadgets.png";
-
-import { getAllProducts } from "../services/productService";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -32,7 +28,10 @@ const Home = () => {
         setError("");
 
         const data = await getAllProducts();
-        setProducts(Array.isArray(data) ? data : []);
+
+        // backend response now returns object: { products, total, ... }
+        const backendProducts = Array.isArray(data?.products) ? data.products : [];
+        setProducts(backendProducts);
       } catch (err) {
         console.error("Error fetching products for home page:", err);
         setError("Failed to load products.");
@@ -45,36 +44,53 @@ const Home = () => {
   }, []);
 
   const homeOutdoorItems = useMemo(() => {
-  return products
-    .slice(0, 4) // 👈 important
-    .map((product) => ({
+    const homeMatches = products.filter((product) => {
+      const category = (product.category || "").toLowerCase();
+      return (
+        category.includes("home") ||
+        category.includes("kitchen") ||
+        category.includes("furniture") ||
+        category.includes("appliance")
+      );
+    });
+
+    const finalItems =
+      homeMatches.length >= 8 ? homeMatches.slice(0, 8) : products.slice(0, 8);
+
+    return finalItems.map((product) => ({
       id: product._id,
       name: product.title,
       price: product.price,
       image: product.image,
       category: product.category,
     }));
-}, [products]);
+  }, [products]);
 
   const electronicsItems = useMemo(() => {
-    return products
-      .filter((product) => {
-        const category = (product.category || "").toLowerCase();
-        return (
-          category.includes("electronics") ||
-          category.includes("electronic") ||
-          category.includes("gadget") ||
-          category.includes("tech")
-        );
-      })
-      .slice(0, 8)
-      .map((product) => ({
-        id: product._id,
-        name: product.title,
-        price: product.price,
-        image: product.image,
-        category: product.category,
-      }));
+    const electronicsMatches = products.filter((product) => {
+      const category = (product.category || "").toLowerCase();
+      return (
+        category.includes("electronics") ||
+        category.includes("electronic") ||
+        category.includes("gadget") ||
+        category.includes("tech") ||
+        category.includes("computer") ||
+        category.includes("wearable")
+      );
+    });
+
+    const finalItems =
+      electronicsMatches.length >= 8
+        ? electronicsMatches.slice(0, 8)
+        : products.slice(0, 8);
+
+    return finalItems.map((product) => ({
+      id: product._id,
+      name: product.title,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+    }));
   }, [products]);
 
   const recommendedItems = useMemo(() => {
@@ -127,7 +143,6 @@ const Home = () => {
               />
 
               <QuoteSection />
-
               <RecommendedSection items={recommendedItems} />
             </>
           )}
