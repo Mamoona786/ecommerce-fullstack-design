@@ -45,25 +45,16 @@ const Home = () => {
   }, []);
 
   const homeOutdoorItems = useMemo(() => {
-    return products
-      .filter((product) => {
-        const category = (product.category || "").toLowerCase();
-        return (
-          category.includes("home") ||
-          category.includes("kitchen") ||
-          category.includes("appliance") ||
-          category.includes("furniture")
-        );
-      })
-      .slice(0, 8)
-      .map((product) => ({
-        id: product._id,
-        name: product.title,
-        price: product.price,
-        image: product.image,
-        category: product.category,
-      }));
-  }, [products]);
+  return products
+    .slice(0, 4) // 👈 important
+    .map((product) => ({
+      id: product._id,
+      name: product.title,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+    }));
+}, [products]);
 
   const electronicsItems = useMemo(() => {
     return products

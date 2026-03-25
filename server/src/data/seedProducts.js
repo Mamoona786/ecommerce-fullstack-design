@@ -10,12 +10,12 @@ const sampleProducts = [
     title: "Canon Camera EOS 2000, Black 10x zoom",
     image: "/electric-kattle.png",
     thumbnails: [
-      "/shirt-1.png",
-      "/shirt-2.png",
-      "/shirt-3.png",
-      "/shirt-4.png",
-      "/shirt-5.png",
-      "/shirt-6.png"
+      "/electric-kattle.png",
+      "/electric-kattle2.png",
+      "/electric-kattle3.png",
+      "/electric-kattle4.png",
+      "/electric-kattle5.png",
+      "/electric-kattle6.png"
     ],
     price: "$998.00",
     oldPrice: "$1128.00",
@@ -70,12 +70,12 @@ const sampleProducts = [
     title: "GoPro HERO6 4K Action Camera - Black",
     image: "/phone.png",
     thumbnails: [
-      "/shirt-1.png",
-      "/shirt-2.png",
-      "/shirt-3.png",
-      "/shirt-4.png",
-      "/shirt-5.png",
-      "/shirt-6.png"
+      "/phone.png",
+      "/phone1a.png",
+      "/phone1b.png",
+      "/phone1c.png",
+      "/phone1d.png",
+      "/phone1e.png"
     ],
     price: "$998.00",
     category: "Electronics",
@@ -94,12 +94,12 @@ const sampleProducts = [
     title: "Professional camera kit with lens bundle",
     image: "/headphones.png",
     thumbnails: [
-      "/shirt-1.png",
-      "/shirt-2.png",
-      "/shirt-3.png",
-      "/shirt-4.png",
-      "/shirt-5.png",
-      "/shirt-6.png"
+      "/headphones.png",
+      "/headphones2.png",
+      "/headphones3.png",
+      "/headphones4.png",
+      "/headphones5.png",
+      "/headphones6.png"
     ],
     price: "$998.00",
     category: "Electronics",
