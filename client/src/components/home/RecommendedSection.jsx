@@ -1,7 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const RecommendedSection = ({ items }) => {
+const formatCurrency = (value) => `$${Number(value || 0).toFixed(2)}`;
+
+const RecommendedSection = ({ items = [] }) => {
   const navigate = useNavigate();
 
   return (
@@ -25,7 +27,7 @@ const RecommendedSection = ({ items }) => {
             </div>
 
             <div className="recommended-card-content">
-              <p className="recommended-price">{item.price}</p>
+              <p className="recommended-price">{formatCurrency(item.price)}</p>
               <p className="recommended-title">{item.title}</p>
               <p className="recommended-subtitle">{item.subtitle}</p>
             </div>

@@ -11,8 +11,10 @@ import ProductListCard from "../components/products/ProductListCard";
 import ProductGridCard from "../components/products/ProductGridCard";
 import ProductsPagination from "../components/products/ProductsPagination";
 import { getAllProducts } from "../services/productService";
-import { parsePrice, matchesRating, includesIgnoreCase } from "../utils/productHelpers";
+import { matchesRating, includesIgnoreCase } from "../utils/productHelpers";
 import "../styles/products.css";
+
+const getNumericPrice = (value) => Number(value || 0);
 
 function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -187,7 +189,11 @@ function Products() {
 
     if (selectedBrands.length) {
       result = result.filter((product) =>
-        selectedBrands.some((brand) => includesIgnoreCase(product.title, brand))
+        selectedBrands.some(
+          (brand) =>
+            includesIgnoreCase(product.brand || "", brand) ||
+            includesIgnoreCase(product.name || "", brand)
+        )
       );
     }
 
@@ -207,13 +213,14 @@ function Products() {
 
     if (appliedMinPrice !== "") {
       result = result.filter(
-        (product) => parsePrice(product.price) >= Number(appliedMinPrice || 0)
+        (product) => getNumericPrice(product.price) >= Number(appliedMinPrice || 0)
       );
     }
 
     if (appliedMaxPrice !== "") {
       result = result.filter(
-        (product) => parsePrice(product.price) <= Number(appliedMaxPrice || Infinity)
+        (product) =>
+          getNumericPrice(product.price) <= Number(appliedMaxPrice || Infinity)
       );
     }
 
@@ -244,10 +251,10 @@ function Products() {
 
     switch (sortOption) {
       case "price-asc":
-        return result.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+        return result.sort((a, b) => getNumericPrice(a.price) - getNumericPrice(b.price));
 
       case "price-desc":
-        return result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+        return result.sort((a, b) => getNumericPrice(b.price) - getNumericPrice(a.price));
 
       case "newest":
         return result.sort(
@@ -327,13 +334,13 @@ function Products() {
                   {viewMode === "grid" ? (
                     <div className="products-grid">
                       {paginatedProducts.map((product) => (
-                        <ProductGridCard key={product._id} product={product} />
+                        <ProductGridCard key={product._id || product.id} product={product} />
                       ))}
                     </div>
                   ) : (
                     <div className="products-list">
                       {paginatedProducts.map((product) => (
-                        <ProductListCard key={product._id} product={product} />
+                        <ProductListCard key={product._id || product.id} product={product} />
                       ))}
                     </div>
                   )}

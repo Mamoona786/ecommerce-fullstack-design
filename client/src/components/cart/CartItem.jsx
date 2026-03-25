@@ -1,19 +1,19 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 function CartItem({ item, isLast, onQuantityChange, onRemove }) {
   const isOutOfStock = item.stock === 0;
   const insufficientStock = item.quantity > item.stock && item.stock > 0;
+  const productName = item.name || item.title;
 
   return (
     <div className={`cart-item ${isLast ? "last" : ""} ${isOutOfStock ? "opacity-50" : ""}`}>
       <div className="cart-item-image">
-        <img src={item.image} alt={item.title || item.name} />
+        <img src={item.image} alt={productName} />
       </div>
 
       <div className="cart-item-details">
         <h6 className={isOutOfStock ? "text-decoration-line-through" : ""}>
-          {item.title || item.name}
+          {productName}
         </h6>
 
         {isOutOfStock ? (

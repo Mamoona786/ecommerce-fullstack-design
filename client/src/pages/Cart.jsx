@@ -45,6 +45,7 @@ function Cart() {
 
       return {
         ...item,
+        name: item.name || item.title || "",
         price: Number(item.price || 0),
         quantity,
         stock,

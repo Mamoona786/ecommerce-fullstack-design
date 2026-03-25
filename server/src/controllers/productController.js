@@ -6,10 +6,16 @@ const parseSortOption = (sort) => {
       return { createdAt: -1 };
     case "oldest":
       return { createdAt: 1 };
+    case "name-asc":
     case "title-asc":
-      return { title: 1 };
+      return { name: 1 };
+    case "name-desc":
     case "title-desc":
-      return { title: -1 };
+      return { name: -1 };
+    case "price-asc":
+      return { price: 1 };
+    case "price-desc":
+      return { price: -1 };
     default:
       return { createdAt: -1 };
   }
@@ -29,11 +35,15 @@ export const getProducts = async (req, res) => {
     const filter = {};
 
     if (search.trim()) {
-      filter.title = { $regex: search.trim(), $options: "i" };
+      filter.name = { $regex: search.trim(), $options: "i" };
     }
 
     if (category.trim() && category !== "All category") {
       filter.category = { $regex: `^${category.trim()}$`, $options: "i" };
+    }
+
+    if (seller.trim()) {
+      filter["seller.name"] = { $regex: seller.trim(), $options: "i" };
     }
 
     const pageNumber = Number(page) || 1;
@@ -74,6 +84,7 @@ export const getProductById = async (req, res) => {
 
     res.status(200).json(product);
   } catch (error) {
+    console.error("Failed to fetch product:", error.message);
     res.status(500).json({ message: "Failed to fetch product" });
   }
 };
