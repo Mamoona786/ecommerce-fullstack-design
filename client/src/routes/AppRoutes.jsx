@@ -4,8 +4,6 @@ import Products from "../pages/Products";
 import ProductDetails from "../pages/ProductDetails";
 import Cart from "../pages/Cart";
 import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import Admin from "../pages/Admin";
 import Register from "../pages/Register";
 
 function AppRoutes() {
@@ -17,8 +15,6 @@ function AppRoutes() {
       <Route path="/cart" element={<Cart />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/admin" element={<Admin />} />
     </Routes>
   );
 }

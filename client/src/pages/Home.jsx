@@ -12,8 +12,11 @@ import NewsletterSection from "../components/common/NewsletterSection";
 import FooterSection from "../components/common/FooterSection";
 import "../styles/home.css";
 
-import heroIndoorImg from "../assets/homeIndoor.png";
-import heroElectronicsImg from "../assets/electronics-gadgets.png";
+// import heroIndoorImg from "../assets/homeIndoor.png";
+// import heroElectronicsImg from "../assets/electronics-gadgets.png";
+
+const heroIndoorImg = "/homeIndoor.png";
+const heroElectronicsImg = "/electronics-gadgets.png";
 
 import { getAllProducts } from "../services/productService";
 

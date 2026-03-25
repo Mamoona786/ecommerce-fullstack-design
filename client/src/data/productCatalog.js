@@ -1,35 +1,35 @@
-import kattleImg from "../assets/electric-kattle.png";
-import phoneImg from "../assets/phone.png";
-import phone2Img from "../assets/phone2.png";
-import headphonesImg from "../assets/headphones.png";
-import laptopImg from "../assets/laptop.png";
-import watchImg from "../assets/watch.png";
-import cameraImg from "../assets/camera.png";
-import headsetImg from "../assets/headset.png";
+const kattleImg = "/electric-kattle.png";
+const phoneImg = "/phone.png";
+const phone2Img = "/phone2.png";
+const headphonesImg = "/headphones.png";
+const laptopImg = "/laptop.png";
+const watchImg = "/watch.png";
+const cameraImg = "/camera.png";
+const headsetImg = "/headset.png";
 
-import tshirtImg from "../assets/recommended-tshirt.png";
-import jacketImg from "../assets/recommended-jacket.png";
-import blazerImg from "../assets/recommended-blazer.png";
-import walletBlueImg from "../assets/recommended-wallet-blue.png";
-import backpackImg from "../assets/recommended-backpack.png";
-import shortsImg from "../assets/recommended-shorts.png";
+const tshirtImg = "/recommended-tshirt.png";
+const jacketImg = "/recommended-jacket.png";
+const blazerImg = "/recommended-blazer.png";
+const walletBlueImg = "/recommended-wallet-blue.png";
+const backpackImg = "/recommended-backpack.png";
+const shortsImg = "/recommended-shorts.png";
 
-import sofaAndChairImg from "../assets/sofa-and-chair.png";
-import softChairsImg from "../assets/soft-chairs.png";
-import kitchenDishesImg from "../assets/kitchen-dishes.png";
-import smartWatchesImg from "../assets/smart-watches.png";
-import kitchenMixerImg from "../assets/kitchen-mixer.png";
-import blendersImg from "../assets/blenders.png";
-import homeApplianceImg from "../assets/home-appliance.png";
-import coffeeMakerImg from "../assets/coffee-maker.png";
-import smartwatches1Img from "../assets/smart-watches1.png";
+const sofaAndChairImg = "/sofa-and-chair.png";
+const softChairsImg = "/soft-chairs.png";
+const kitchenDishesImg = "/kitchen-dishes.png";
+const smartWatchesImg = "/smart-watches.png";
+const kitchenMixerImg = "/kitchen-mixer.png";
+const blendersImg = "/blenders.png";
+const homeApplianceImg = "/home-appliance.png";
+const coffeeMakerImg = "/coffee-maker.png";
+const smartwatches1Img = "/smart-watches1.png";
 
-import thumb1 from "../assets/shirt-1.png";
-import thumb2 from "../assets/shirt-2.png";
-import thumb3 from "../assets/shirt-3.png";
-import thumb4 from "../assets/shirt-4.png";
-import thumb5 from "../assets/shirt-5.png";
-import thumb6 from "../assets/shirt-6.png";
+const thumb1 = "/shirt-1.png";
+const thumb2 = "/shirt-2.png";
+const thumb3 = "/shirt-3.png";
+const thumb4 = "/shirt-4.png";
+const thumb5 = "/shirt-5.png";
+const thumb6 = "/shirt-6.png";
 
 const defaultThumbs = [thumb1, thumb2, thumb3, thumb4, thumb5, thumb6];
 

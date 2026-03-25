@@ -23,6 +23,12 @@ import {
 } from "react-icons/fi";
 
 import { getProductById } from "../services/productService";
+import {
+  addProductToCart,
+  getUniqueProductImages,
+  isProductSaved,
+  toggleSavedProduct,
+} from "../utils/productDetailsHelpers";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -30,6 +36,8 @@ function ProductDetails() {
 
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
+  const [selectedTierIndex, setSelectedTierIndex] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isSaved, setIsSaved] = useState(false);
@@ -42,7 +50,12 @@ function ProductDetails() {
 
         const data = await getProductById(id);
         setProduct(data);
-        setSelectedImage(data?.image || "");
+
+        const allImages = getUniqueProductImages(data);
+        setSelectedImage(allImages[0] || "");
+        setSelectedTierIndex(0);
+        setQuantity(1);
+        setIsSaved(isProductSaved(data?._id));
       } catch (err) {
         console.error("Failed to fetch product:", err);
         setError("Product not found.");
@@ -56,15 +69,83 @@ function ProductDetails() {
     }
   }, [id]);
 
+  const productImages = useMemo(() => {
+    return getUniqueProductImages(product);
+  }, [product]);
+
   const relatedProducts = useMemo(() => {
     if (!product) return [];
-    return product.relatedIds || [];
+    return Array.isArray(product.relatedIds) ? product.relatedIds : [];
   }, [product]);
 
   const youMayLikeItems = useMemo(() => {
     if (!product) return [];
-    return product.youMayLikeIds || [];
+    return Array.isArray(product.youMayLikeIds) ? product.youMayLikeIds : [];
   }, [product]);
+
+  const selectedTierPrice = useMemo(() => {
+    if (!product?.priceTiers?.length) return product?.price || "";
+    return product.priceTiers[selectedTierIndex]?.price || product.price;
+  }, [product, selectedTierIndex]);
+
+  const breadcrumbItems = useMemo(() => {
+    if (!product) {
+      return [
+        { label: "Home", to: "/" },
+        { label: "Products", to: "/products" },
+      ];
+    }
+
+    return [
+      { label: "Home", to: "/" },
+      { label: "Products", to: "/products" },
+      {
+        label: product.category || "Category",
+        to: `/products?category=${encodeURIComponent(product.category || "")}`,
+      },
+      { label: product.title },
+    ];
+  }, [product]);
+
+  const handleSaveToggle = () => {
+    if (!product) return;
+    const savedStatus = toggleSavedProduct(product);
+    setIsSaved(savedStatus);
+  };
+
+  const handleAddToCart = () => {
+    if (!product) return;
+
+    addProductToCart({
+      product,
+      quantity,
+      selectedTierPrice,
+    });
+
+    alert("Product added to cart successfully!");
+  };
+
+  const handleBuyNow = () => {
+    if (!product) return;
+
+    addProductToCart({
+      product,
+      quantity,
+      selectedTierPrice,
+    });
+
+    navigate("/cart");
+  };
+
+  const handleSendInquiry = () => {
+    if (!product?.seller?.name) return;
+    navigate(`/products?seller=${encodeURIComponent(product.seller.name)}`);
+  };
+
+  const handleSellerProfile = () => {
+    if (!product?.seller?.name) return;
+    navigate(`/products?seller=${encodeURIComponent(product.seller.name)}`);
+  };
 
   if (loading) {
     return (
@@ -108,7 +189,7 @@ function ProductDetails() {
 
       <main className="product-details-page">
         <div className="container">
-          <ProductsBreadcrumb />
+          <ProductsBreadcrumb items={breadcrumbItems} />
 
           <section className="product-details-card">
             <div className="product-details-left">
@@ -121,9 +202,9 @@ function ProductDetails() {
               </div>
 
               <div className="product-thumbnails-row">
-                {(product.thumbnails || []).map((thumb, index) => (
+                {productImages.map((thumb, index) => (
                   <button
-                    key={index}
+                    key={`${thumb}-${index}`}
                     type="button"
                     className={`product-thumb-btn ${
                       selectedImage === thumb ? "product-thumb-btn-active" : ""
@@ -172,16 +253,58 @@ function ProductDetails() {
 
               <div className="product-tier-pricing">
                 {(product.priceTiers || []).map((tier, index) => (
-                  <div
+                  <button
+                    type="button"
                     key={`${tier.price}-${tier.qty}`}
                     className={`product-tier-price-item ${
-                      index === 0 ? "product-tier-price-item-active" : ""
+                      selectedTierIndex === index
+                        ? "product-tier-price-item-selected"
+                        : index === 0
+                        ? "product-tier-price-item-active"
+                        : ""
                     }`}
+                    onClick={() => setSelectedTierIndex(index)}
                   >
                     <h3>{tier.price}</h3>
                     <p>{tier.qty}</p>
-                  </div>
+                  </button>
                 ))}
+              </div>
+
+              <div className="product-action-row">
+                <div className="product-qty-select-wrap">
+                  <label htmlFor="product-qty" className="product-qty-label">
+                    Qty
+                  </label>
+                  <select
+                    id="product-qty"
+                    className="product-qty-select"
+                    value={quantity}
+                    onChange={(e) => setQuantity(Number(e.target.value))}
+                  >
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((qty) => (
+                      <option key={qty} value={qty}>
+                        {qty}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <button
+                  type="button"
+                  className="product-add-cart-btn"
+                  onClick={handleAddToCart}
+                >
+                  Add to cart
+                </button>
+
+                <button
+                  type="button"
+                  className="product-buy-now-btn"
+                  onClick={handleBuyNow}
+                >
+                  Buy now
+                </button>
               </div>
 
               <div className="product-specs-table">
@@ -228,29 +351,29 @@ function ProductDetails() {
                   </div>
                 </div>
 
-                <button className="supplier-primary-btn" type="button">
+                <button
+                  className="supplier-primary-btn"
+                  type="button"
+                  onClick={handleSendInquiry}
+                >
                   Send inquiry
                 </button>
 
                 <button
                   className="supplier-secondary-btn"
                   type="button"
-                  onClick={() =>
-                    navigate(
-                      `/products?seller=${encodeURIComponent(
-                        product.seller?.name || ""
-                      )}`
-                    )
-                  }
+                  onClick={handleSellerProfile}
                 >
                   Seller&apos;s profile
                 </button>
               </div>
 
               <button
-                className="save-later-btn"
+                className={`save-later-btn ${
+                  isSaved ? "save-later-btn-active" : ""
+                }`}
                 type="button"
-                onClick={() => setIsSaved((prev) => !prev)}
+                onClick={handleSaveToggle}
               >
                 <FiHeart />
                 <span>{isSaved ? "Saved" : "Save for later"}</span>

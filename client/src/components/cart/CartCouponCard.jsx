@@ -1,8 +1,9 @@
 import React from "react";
 
-function CartCouponCard({ coupon, setCoupon }) {
+function CartCouponCard({ coupon, setCoupon, onApply }) {
   const handleSubmit = (e) => {
     e.preventDefault();
+    onApply();
   };
 
   return (

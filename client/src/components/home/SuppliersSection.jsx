@@ -1,14 +1,24 @@
 import React from "react";
 
-import uaeFlag from "../../assets/flag-ae.jpg";
-import australiaFlag from "../../assets/flag-au.jpg";
-import usaFlag from "../../assets/flag-us.jpg";
-import russiaFlag from "../../assets/flag-ru.jpg";
-import italyFlag from "../../assets/flag-it.jpg";
-import denmarkFlag from "../../assets/flag-dk.jpg";
-import franceFlag from "../../assets/flag-fr.jpg";
-import chinaFlag from "../../assets/flag-cn.jpg";
-import ukFlag from "../../assets/flag-gb.jpg";
+// import uaeFlag from "../../assets/flag-ae.jpg";
+// import australiaFlag from "../../assets/flag-au.jpg";
+// import usaFlag from "../../assets/flag-us.jpg";
+// import russiaFlag from "../../assets/flag-ru.jpg";
+// import italyFlag from "../../assets/flag-it.jpg";
+// import denmarkFlag from "../../assets/flag-dk.jpg";
+// import franceFlag from "../../assets/flag-fr.jpg";
+// import chinaFlag from "../../assets/flag-cn.jpg";
+// import ukFlag from "../../assets/flag-gb.jpg";
+
+const uaeFlag = "/flag-ae.jpg";
+const australiaFlag = "/flag-au.jpg";
+const usaFlag = "/flag-us.jpg";
+const russiaFlag = "/flag-ru.jpg";
+const italyFlag = "/flag-it.jpg";
+const denmarkFlag = "/flag-dk.jpg";
+const franceFlag = "/flag-fr.jpg";
+const chinaFlag = "/flag-cn.jpg";
+const ukFlag = "/flag-gb.jpg";
 
 const suppliers = [
   { flag: uaeFlag, country: "Arabic Emirates", site: "shopname.ae" },

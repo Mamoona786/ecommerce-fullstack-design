@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaHeart, FaStar, FaRegStar } from "react-icons/fa";
 
 const ProductListCard = ({ product }) => {
+  const [isFav, setIsFav] = useState(false);
+
   return (
     <article className="product-list-card">
       <Link
@@ -22,7 +24,11 @@ const ProductListCard = ({ product }) => {
             <h3 className="product-list-title">{product.title}</h3>
           </Link>
 
-          <button className="product-fav-btn" type="button">
+          <button
+            className={`product-fav-btn ${isFav ? "product-fav-btn-active" : ""}`}
+            type="button"
+            onClick={() => setIsFav((prev) => !prev)}
+          >
             <FaHeart />
           </button>
         </div>

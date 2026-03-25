@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import quoteBgImg from "../../assets/quote-banner.png";
+// import quoteBgImg from "../../../images/quote-banner.png";
+
+const quoteBgImg = "/quote-banner.png";
 
 const QuoteSection = () => {
   const [formData, setFormData] = useState({

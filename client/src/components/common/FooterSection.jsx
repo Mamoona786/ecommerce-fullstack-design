@@ -11,7 +11,8 @@ import {
 } from "react-icons/fa";
 import { BsBag } from "react-icons/bs";
 import { IoChevronDownOutline } from "react-icons/io5";
-import usaFlag from "../../assets/flag-us.jpg";
+
+const usaFlag = "/flag-us.jpg";
 
 const FooterSection = () => {
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -35,19 +36,44 @@ const FooterSection = () => {
             </p>
 
             <div className="footer-socials">
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="footer-social">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-social"
+              >
                 <FaFacebookF />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="footer-social">
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-social"
+              >
                 <FaTwitter />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="footer-social">
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-social"
+              >
                 <FaLinkedinIn />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="footer-social">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-social"
+              >
                 <FaInstagram />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" className="footer-social">
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-social"
+              >
                 <FaYoutube />
               </a>
             </div>
@@ -80,7 +106,7 @@ const FooterSection = () => {
           <div className="footer-links-column">
             <h4 className="footer-links-title">For users</h4>
             <Link to="/login" className="footer-link">Login</Link>
-            <Link to="/signup" className="footer-link">Register</Link>
+            <Link to="/register" className="footer-link">Register</Link>
             <Link to="/" className="footer-link">Settings</Link>
             <Link to="/cart" className="footer-link">My Orders</Link>
           </div>
@@ -88,7 +114,11 @@ const FooterSection = () => {
           <div className="footer-app-column">
             <h4 className="footer-links-title">Get app</h4>
 
-            <a href="/" className="store-badge apple-badge" onClick={(e) => e.preventDefault()}>
+            <a
+              href="/"
+              className="store-badge apple-badge"
+              onClick={(e) => e.preventDefault()}
+            >
               <span className="store-badge-icon">
                 <FaApple />
               </span>
@@ -99,7 +129,11 @@ const FooterSection = () => {
               </span>
             </a>
 
-            <a href="/" className="store-badge google-badge" onClick={(e) => e.preventDefault()}>
+            <a
+              href="/"
+              className="store-badge google-badge"
+              onClick={(e) => e.preventDefault()}
+            >
               <span className="store-badge-icon google-play-icon">
                 <FaGooglePlay />
               </span>

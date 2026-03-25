@@ -8,14 +8,14 @@ import Product from "../models/Product.js";
 const sampleProducts = [
   {
     title: "Canon Camera EOS 2000, Black 10x zoom",
-    image: "/src/assets/electric-kattle.png",
+    image: "/electric-kattle.png",
     thumbnails: [
-      "/src/assets/shirt-1.png",
-      "/src/assets/shirt-2.png",
-      "/src/assets/shirt-3.png",
-      "/src/assets/shirt-4.png",
-      "/src/assets/shirt-5.png",
-      "/src/assets/shirt-6.png"
+      "/shirt-1.png",
+      "/shirt-2.png",
+      "/shirt-3.png",
+      "/shirt-4.png",
+      "/shirt-5.png",
+      "/shirt-6.png"
     ],
     price: "$998.00",
     oldPrice: "$1128.00",
@@ -68,14 +68,14 @@ const sampleProducts = [
   },
   {
     title: "GoPro HERO6 4K Action Camera - Black",
-    image: "/src/assets/phone.png",
+    image: "/phone.png",
     thumbnails: [
-      "/src/assets/shirt-1.png",
-      "/src/assets/shirt-2.png",
-      "/src/assets/shirt-3.png",
-      "/src/assets/shirt-4.png",
-      "/src/assets/shirt-5.png",
-      "/src/assets/shirt-6.png"
+      "/shirt-1.png",
+      "/shirt-2.png",
+      "/shirt-3.png",
+      "/shirt-4.png",
+      "/shirt-5.png",
+      "/shirt-6.png"
     ],
     price: "$998.00",
     category: "Electronics",
@@ -92,14 +92,14 @@ const sampleProducts = [
   },
   {
     title: "Professional camera kit with lens bundle",
-    image: "/src/assets/headphones.png",
+    image: "/headphones.png",
     thumbnails: [
-      "/src/assets/shirt-1.png",
-      "/src/assets/shirt-2.png",
-      "/src/assets/shirt-3.png",
-      "/src/assets/shirt-4.png",
-      "/src/assets/shirt-5.png",
-      "/src/assets/shirt-6.png"
+      "/shirt-1.png",
+      "/shirt-2.png",
+      "/shirt-3.png",
+      "/shirt-4.png",
+      "/shirt-5.png",
+      "/shirt-6.png"
     ],
     price: "$998.00",
     category: "Electronics",

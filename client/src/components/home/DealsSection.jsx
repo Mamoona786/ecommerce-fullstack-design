@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import watchImg from "../../assets/watch.png";
-import laptopImg from "../../assets/laptop.png";
-import cameraImg from "../../assets/camera.png";
-import headsetImg from "../../assets/headset.png";
-import phoneImg from "../../assets/phone.png";
+// import watchImg from "../../assets/watch.png";
+// import laptopImg from "../../assets/laptop.png";
+// import cameraImg from "../../assets/camera.png";
+// import headsetImg from "../../assets/headset.png";
+// import phoneImg from "../../assets/phone.png";
+
+const watchImg = "/watch.png";
+const laptopImg = "/laptop.png";
+const cameraImg = "/camera.png";
+const headsetImg = "/headset.png"
+const phoneImg = "/phone.png";
 
 const INITIAL_TIME = {
   days: 4,

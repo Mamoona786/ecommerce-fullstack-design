@@ -4,8 +4,10 @@ import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff, FiMail } from "react-icons/fi";
 import "../styles/register.css";
 
-import registerHeroImg from "../assets/login-hero.png";
+// import registerHeroImg from "../../images/login-hero.png";
 import { registerUser } from "../services/authService";
+
+const registerHeroImg = "/login-hero.png";
 
 const Register = () => {
   const navigate = useNavigate();

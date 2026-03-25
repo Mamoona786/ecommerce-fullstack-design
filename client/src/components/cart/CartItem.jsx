@@ -2,6 +2,8 @@ import React from "react";
 import { IoChevronDownOutline } from "react-icons/io5";
 
 function CartItem({ item, isLast, onQuantityChange, onRemove }) {
+  const safePrice = Number(item.price) || 0;
+
   return (
     <article className={`cart-item ${isLast ? "cart-item-last" : ""}`}>
       <div className="cart-item-left">
@@ -18,7 +20,7 @@ function CartItem({ item, isLast, onQuantityChange, onRemove }) {
             <button
               type="button"
               className="cart-item-remove-btn"
-              onClick={() => onRemove(item.id)}
+              onClick={() => onRemove(item.product || item.id)}
             >
               Remove
             </button>
@@ -31,17 +33,19 @@ function CartItem({ item, isLast, onQuantityChange, onRemove }) {
       </div>
 
       <div className="cart-item-right">
-        <p className="cart-item-price">${item.price.toFixed(2)}</p>
+        <p className="cart-item-price">${safePrice.toFixed(2)}</p>
 
         <div className="cart-qty-select-wrap">
           <select
-            className="cart-qty-select"
             value={item.quantity}
-            onChange={(e) => onQuantityChange(item.id, e.target.value)}
+            onChange={(e) =>
+              onQuantityChange(item.product || item.id, e.target.value)
+            }
+            className="cart-qty-select"
           >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((qty) => (
-              <option key={qty} value={qty}>
-                Qty: {qty}
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((q) => (
+              <option key={q} value={q}>
+                Qty: {q}
               </option>
             ))}
           </select>

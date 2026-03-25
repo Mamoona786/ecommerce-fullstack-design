@@ -4,10 +4,15 @@ import { FiSearch, FiPackage } from "react-icons/fi";
 import { HiOutlinePaperAirplane } from "react-icons/hi2";
 import { BsShieldCheck } from "react-icons/bs";
 
-import serviceWarehouseImg from "../../assets/service-warehouse.png";
-import serviceCustomizeImg from "../../assets/service-customize.png";
-import serviceShippingImg from "../../assets/service-shipping.png";
-import serviceInspectionImg from "../../assets/service-inspection.png";
+// import serviceWarehouseImg from "../../assets/service-warehouse.png";
+// import serviceCustomizeImg from "../../assets/service-customize.png";
+// import serviceShippingImg from "../../assets/service-shipping.png";
+// import serviceInspectionImg from "../../assets/service-inspection.png";
+
+const serviceWarehouseImg = "/service-warehouse.png";
+const serviceCustomizeImg = "/service-customize.png";
+const serviceShippingImg = "/service-shipping.png";
+const serviceInspectionImg = "/service-inspection.png";
 
 const services = [
   {

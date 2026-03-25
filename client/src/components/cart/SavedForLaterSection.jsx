@@ -1,10 +1,15 @@
 import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
 
-import phoneImg from "../../assets/phone.png";
-import phone2Img from "../../assets/phone2.png";
-import watchImg from "../../assets/watch.png";
-import laptopImg from "../../assets/laptop.png";
+// import phoneImg from "../../assets/phone.png";
+// import phone2Img from "../../assets/phone2.png";
+// import watchImg from "../../assets/watch.png";
+// import laptopImg from "../../assets/laptop.png";
+
+const phoneImg = "/phone.png";
+const phone2Img = "/phone2.png";
+const watchImg = "/watch.png";
+const laptopImg = "/laptop.png";
 
 const savedItems = [
   {

@@ -31,50 +31,75 @@ function ProductDetailsTabsSection({ product, youMayLikeItems = [] }) {
             {activeTab === "Description" && (
               <>
                 <p className="product-details-description-text">
-                  {product?.shortDescription}
+                  {product?.shortDescription || "No description available for this product."}
                 </p>
 
                 <div className="product-details-spec-table">
-                  {(product?.detailSpecRows || []).map((row) => (
-                    <div className="product-details-spec-table-row" key={row.label}>
-                      <div className="product-details-spec-table-label">
-                        {row.label}
+                  {(product?.detailSpecRows || []).length > 0 ? (
+                    (product?.detailSpecRows || []).map((row) => (
+                      <div className="product-details-spec-table-row" key={row.label}>
+                        <div className="product-details-spec-table-label">
+                          {row.label}
+                        </div>
+                        <div className="product-details-spec-table-value">
+                          {row.value}
+                        </div>
                       </div>
-                      <div className="product-details-spec-table-value">
-                        {row.value}
-                      </div>
+                    ))
+                  ) : (
+                    <div className="product-details-tab-placeholder">
+                      No technical specifications available.
                     </div>
-                  ))}
+                  )}
                 </div>
 
                 <div className="product-details-feature-list">
-                  {(product?.features || []).map((feature, index) => (
-                    <div className="product-details-feature-item" key={index}>
-                      <span className="product-details-feature-icon">
-                        <FiCheck />
-                      </span>
-                      <span>{feature}</span>
+                  {(product?.features || []).length > 0 ? (
+                    (product?.features || []).map((feature, index) => (
+                      <div className="product-details-feature-item" key={index}>
+                        <span className="product-details-feature-icon">
+                          <FiCheck />
+                        </span>
+                        <span>{feature}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="product-details-tab-placeholder">
+                      No product features available.
                     </div>
-                  ))}
+                  )}
                 </div>
               </>
             )}
 
             {activeTab === "Reviews" && (
               <div className="product-details-tab-placeholder">
-                {product?.reviews || 0} reviews available for this product.
+                <strong>{product?.reviews || 0}</strong> reviews available for this product.
+                <br />
+                Current rating: <strong>{product?.rating || 0}</strong>/10
               </div>
             )}
 
             {activeTab === "Shipping" && (
               <div className="product-details-tab-placeholder">
-                {product?.shipping || "Worldwide shipping"}.
+                Shipping method:{" "}
+                <strong>{product?.shipping || "Worldwide shipping"}</strong>
+                <br />
+                Seller shipping coverage:{" "}
+                <strong>{product?.seller?.shipping || "Worldwide shipping"}</strong>
               </div>
             )}
 
             {activeTab === "About seller" && (
               <div className="product-details-tab-placeholder">
-                Seller: {product?.seller?.name} — {product?.seller?.location}
+                Seller: <strong>{product?.seller?.name || "Unknown seller"}</strong>
+                <br />
+                Location: <strong>{product?.seller?.location || "N/A"}</strong>
+                <br />
+                Status:{" "}
+                <strong>
+                  {product?.seller?.verified ? "Verified Seller" : "Standard Seller"}
+                </strong>
               </div>
             )}
           </div>
@@ -89,8 +114,8 @@ function ProductDetailsTabsSection({ product, youMayLikeItems = [] }) {
             {youMayLikeItems.map((item) => (
               <article
                 className="product-details-you-may-like-item"
-                key={item.id}
-                onClick={() => navigate(`/products/${item.id}`)}
+                key={item._id || item.id}
+                onClick={() => navigate(`/products/${item._id || item.id}`)}
                 style={{ cursor: "pointer" }}
               >
                 <div className="product-details-you-may-like-image-wrap">

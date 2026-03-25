@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import heroImg from "../../assets/hero-electronics.png";
+// import heroImg from "../../assets/hero-electronics.png";
 import { FaUserCircle } from "react-icons/fa";
+
+const heroImg = "/hero-electronics.png";
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -72,7 +74,7 @@ const HeroSection = () => {
           <button
             className="join-btn"
             type="button"
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/register")}
           >
             Join now
           </button>
