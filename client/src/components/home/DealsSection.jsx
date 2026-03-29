@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 const watchImg = "/watch.png";
 const laptopImg = "/laptop.png";
 const cameraImg = "/camera.png";
-const headsetImg = "/headset.png"
-const phoneImg = "/phone.png";
+const headsetImg = "/black-headset.png"
+const phoneImg = "/blue-phone1a.png";
 
 const INITIAL_TIME = {
   days: 4,

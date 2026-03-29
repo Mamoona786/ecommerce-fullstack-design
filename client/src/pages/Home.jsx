@@ -28,8 +28,6 @@ const Home = () => {
         setError("");
 
         const data = await getAllProducts();
-
-        // backend response now returns object: { products, total, ... }
         const backendProducts = Array.isArray(data?.products) ? data.products : [];
         setProducts(backendProducts);
       } catch (err) {
@@ -46,11 +44,22 @@ const Home = () => {
   const homeOutdoorItems = useMemo(() => {
     const homeMatches = products.filter((product) => {
       const category = (product.category || "").toLowerCase();
+      const subCategory = (product.subCategory || "").toLowerCase();
+
       return (
         category.includes("home") ||
         category.includes("kitchen") ||
-        category.includes("furniture") ||
-        category.includes("appliance")
+        category.includes("garden") ||
+        category.includes("office") ||
+        subCategory.includes("chairs") ||
+        subCategory.includes("lighting") ||
+        subCategory.includes("bedroom") ||
+        subCategory.includes("cookware") ||
+        subCategory.includes("blenders") ||
+        subCategory.includes("juicers") ||
+        subCategory.includes("kettles") ||
+        subCategory.includes("storage") ||
+        subCategory.includes("plants")
       );
     });
 
@@ -58,24 +67,31 @@ const Home = () => {
       homeMatches.length >= 8 ? homeMatches.slice(0, 8) : products.slice(0, 8);
 
     return finalItems.map((product) => ({
-      id: product._id,
-      name: product.title,
+      id: product._id || product.id,
+      name: product.name,
       price: product.price,
       image: product.image,
       category: product.category,
+      stock: product.stock,
+      stockStatus: product.stockStatus,
     }));
   }, [products]);
 
   const electronicsItems = useMemo(() => {
     const electronicsMatches = products.filter((product) => {
       const category = (product.category || "").toLowerCase();
+      const subCategory = (product.subCategory || "").toLowerCase();
+
       return (
         category.includes("electronics") ||
-        category.includes("electronic") ||
-        category.includes("gadget") ||
-        category.includes("tech") ||
         category.includes("computer") ||
-        category.includes("wearable")
+        category.includes("mobile") ||
+        subCategory.includes("wearables") ||
+        subCategory.includes("cameras") ||
+        subCategory.includes("audio") ||
+        subCategory.includes("gaming") ||
+        subCategory.includes("laptops") ||
+        subCategory.includes("smartphones")
       );
     });
 
@@ -85,26 +101,31 @@ const Home = () => {
         : products.slice(0, 8);
 
     return finalItems.map((product) => ({
-      id: product._id,
-      name: product.title,
+      id: product._id || product.id,
+      name: product.name,
       price: product.price,
       image: product.image,
       category: product.category,
+      stock: product.stock,
+      stockStatus: product.stockStatus,
     }));
   }, [products]);
 
   const recommendedItems = useMemo(() => {
     return products.slice(0, 10).map((product) => ({
-      id: product._id,
+      id: product._id || product.id,
       image: product.image,
       price: product.price,
-      title: product.title,
+      title: product.name,
       subtitle:
         product.subtitle ||
         product.shortDescription ||
+        product.subCategory ||
         product.category ||
         "",
       category: product.category,
+      stock: product.stock,
+      stockStatus: product.stockStatus,
     }));
   }, [products]);
 

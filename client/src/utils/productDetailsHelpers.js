@@ -36,7 +36,7 @@ export const toggleSavedProduct = (product) => {
       ...savedProducts,
       {
         id: product._id,
-        title: product.title,
+        title: product.name || product.title,
         image: product.image,
         price: product.price,
       },
@@ -106,7 +106,7 @@ export const addProductToCart = async ({
 
   const newItem = {
     id: product._id,
-    title: product.title,
+    title: product.name || product.title,
     details: product.shortDescription || product.category || "",
     seller: product?.seller?.name || "Unknown seller",
     image: product.image,

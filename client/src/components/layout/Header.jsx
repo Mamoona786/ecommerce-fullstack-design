@@ -89,7 +89,6 @@ const Header = () => {
               <button
                 className="icon-item icon-item-button"
                 type="button"
-                onClick={() => navigate("/profile")}
               >
                 <FaUser className="icon" />
                 <span className="icon-label">
@@ -100,7 +99,6 @@ const Header = () => {
               <button
                 className="icon-item icon-item-button"
                 type="button"
-                onClick={() => navigate("/orders")}
               >
                 <FaBoxOpen className="icon" />
                 <span className="icon-label">Orders</span>

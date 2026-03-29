@@ -1,21 +1,44 @@
 export const CATEGORY_ITEMS = [
-  "Mobile accessory",
+  "Home & Living",
+  "Kitchen & Dining",
+  "Kitchen Appliances",
+  "Office & Storage",
+  "Home & Garden",
   "Electronics",
-  "Smartphones",
-  "Modern tech",
+  "Computers",
+  "Mobiles",
 ];
 
-export const BRAND_ITEMS = ["Samsung", "Apple", "Huawei", "Pocco", "Lenovo"];
+export const BRAND_ITEMS = [
+  "ComfortNest",
+  "LumaHome",
+  "SleepEase",
+  "CookElite",
+  "FreshMix",
+  "BlendPro",
+  "SpaceLine",
+  "GreenNest",
+  "TechTime",
+  "SnapPro",
+  "SoundBeat",
+  "QuickBoil",
+  "GameX",
+  "NextCore",
+  "NovaMobile",
+];
 
 export const FEATURE_ITEMS = [
-  "Metallic",
-  "Plastic cover",
-  "8GB Ram",
-  "Super power",
-  "Large Memory",
+  "Modern",
+  "Premium",
+  "Comfortable",
+  "Gaming",
+  "Compact",
+  "Wireless",
+  "Portable",
+  "Durable",
 ];
 
-export const CONDITION_ITEMS = ["Any", "Refurbished", "Brand new", "Old items"];
+export const CONDITION_ITEMS = ["Any", "Brand new", "Refurbished", "Old items"];
 
 export const RATING_ROWS = [5, 4, 3, 2];
 

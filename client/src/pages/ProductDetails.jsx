@@ -8,6 +8,8 @@ import ProductDiscountBanner from "../components/common/ProductDiscountBanner";
 import ProductDetailsTabsSection from "../components/productDetails/ProductDetailsTabsSection";
 import RelatedProductsSection from "../components/productDetails/RelatedProductsSection";
 import "../styles/productDetails.css";
+import { addCartItem } from "../utils/cartHelpers";
+import { addToCart } from "../services/cartService";
 
 import {
   FaStar,
@@ -24,11 +26,12 @@ import {
 
 import { getProductById } from "../services/productService";
 import {
-  addProductToCart,
   getUniqueProductImages,
   isProductSaved,
   toggleSavedProduct,
 } from "../utils/productDetailsHelpers";
+
+const formatCurrency = (value) => `$${Number(value || 0).toFixed(2)}`;
 
 function ProductDetails() {
   const { id } = useParams();
@@ -55,7 +58,7 @@ function ProductDetails() {
         setSelectedImage(allImages[0] || "");
         setSelectedTierIndex(0);
         setQuantity(1);
-        setIsSaved(isProductSaved(data?._id));
+        setIsSaved(isProductSaved(data?._id || data?.id));
       } catch (err) {
         console.error("Failed to fetch product:", err);
         setError("Product not found.");
@@ -68,6 +71,8 @@ function ProductDetails() {
       loadProduct();
     }
   }, [id]);
+
+  const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   const productImages = useMemo(() => {
     return getUniqueProductImages(product);
@@ -84,8 +89,8 @@ function ProductDetails() {
   }, [product]);
 
   const selectedTierPrice = useMemo(() => {
-    if (!product?.priceTiers?.length) return product?.price || "";
-    return product.priceTiers[selectedTierIndex]?.price || product.price;
+    if (!product?.priceTiers?.length) return Number(product?.price || 0);
+    return Number(product.priceTiers[selectedTierIndex]?.price || product.price || 0);
   }, [product, selectedTierIndex]);
 
   const breadcrumbItems = useMemo(() => {
@@ -103,8 +108,14 @@ function ProductDetails() {
         label: product.category || "Category",
         to: `/products?category=${encodeURIComponent(product.category || "")}`,
       },
-      { label: product.title },
+      { label: product.name },
     ];
+  }, [product]);
+
+  const maxQty = useMemo(() => {
+    const stock = Number(product?.stock || 0);
+    if (stock <= 0) return 1;
+    return Math.min(stock, 10);
   }, [product]);
 
   const handleSaveToggle = () => {
@@ -113,29 +124,75 @@ function ProductDetails() {
     setIsSaved(savedStatus);
   };
 
-  const handleAddToCart = () => {
-    if (!product) return;
+  const handleAddToCart = async () => {
+  if (!product) return;
 
-    addProductToCart({
-      product,
-      quantity,
-      selectedTierPrice,
-    });
+  if (Number(product.stock || 0) <= 0) {
+    alert("This product is out of stock.");
+    return;
+  }
+
+  if (quantity > Number(product.stock || 0)) {
+    alert(`Only ${product.stock} item(s) available in stock.`);
+    return;
+  }
+
+  try {
+    if (isAuthenticated) {
+      await addToCart({
+        productId: product._id,
+        quantity,
+        selectedTierPrice,
+      });
+    } else {
+      addCartItem({
+        product,
+        quantity,
+        selectedTierPrice,
+      });
+    }
 
     alert("Product added to cart successfully!");
-  };
+  } catch (error) {
+    console.error("Failed to add product to cart:", error);
+    alert(error?.response?.data?.message || "Failed to add product to cart");
+  }
+};
 
-  const handleBuyNow = () => {
-    if (!product) return;
+  const handleBuyNow = async () => {
+  if (!product) return;
 
-    addProductToCart({
-      product,
-      quantity,
-      selectedTierPrice,
-    });
+  if (Number(product.stock || 0) <= 0) {
+    alert("This product is out of stock.");
+    return;
+  }
+
+  if (quantity > Number(product.stock || 0)) {
+    alert(`Only ${product.stock} item(s) available in stock.`);
+    return;
+  }
+
+  try {
+    if (isAuthenticated) {
+      await addToCart({
+        productId: product._id,
+        quantity,
+        selectedTierPrice,
+      });
+    } else {
+      addCartItem({
+        product,
+        quantity,
+        selectedTierPrice,
+      });
+    }
 
     navigate("/cart");
-  };
+  } catch (error) {
+    console.error("Failed to buy product now:", error);
+    alert(error?.response?.data?.message || "Failed to add product to cart");
+  }
+};
 
   const handleSendInquiry = () => {
     if (!product?.seller?.name) return;
@@ -196,7 +253,7 @@ function ProductDetails() {
               <div className="product-main-image-box">
                 <img
                   src={selectedImage || product.image}
-                  alt={product.title}
+                  alt={product.name}
                   className="product-main-image"
                 />
               </div>
@@ -224,10 +281,13 @@ function ProductDetails() {
             <div className="product-details-center">
               <div className="product-stock-status">
                 <FaCheck />
-                <span>{product.stockStatus}</span>
+                <span>
+                  {product.stockStatus}
+                  {typeof product.stock === "number" ? ` (${product.stock} left)` : ""}
+                </span>
               </div>
 
-              <h1 className="product-details-title">{product.title}</h1>
+              <h1 className="product-details-title">{product.name}</h1>
 
               <div className="product-rating-row">
                 <div className="product-rating-stars">
@@ -265,11 +325,23 @@ function ProductDetails() {
                     }`}
                     onClick={() => setSelectedTierIndex(index)}
                   >
-                    <h3>{tier.price}</h3>
+                    <h3>{formatCurrency(tier.price)}</h3>
                     <p>{tier.qty}</p>
                   </button>
                 ))}
               </div>
+
+              {!product.priceTiers?.length && (
+                <div className="product-tier-pricing">
+                  <button
+                    type="button"
+                    className="product-tier-price-item product-tier-price-item-selected"
+                  >
+                    <h3>{formatCurrency(product.price)}</h3>
+                    <p>Single item price</p>
+                  </button>
+                </div>
+              )}
 
               <div className="product-action-row">
                 <div className="product-qty-select-wrap">
@@ -281,8 +353,9 @@ function ProductDetails() {
                     className="product-qty-select"
                     value={quantity}
                     onChange={(e) => setQuantity(Number(e.target.value))}
+                    disabled={Number(product.stock || 0) <= 0}
                   >
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((qty) => (
+                    {Array.from({ length: maxQty }, (_, i) => i + 1).map((qty) => (
                       <option key={qty} value={qty}>
                         {qty}
                       </option>
@@ -294,6 +367,7 @@ function ProductDetails() {
                   type="button"
                   className="product-add-cart-btn"
                   onClick={handleAddToCart}
+                  disabled={Number(product.stock || 0) <= 0}
                 >
                   Add to cart
                 </button>
@@ -302,6 +376,7 @@ function ProductDetails() {
                   type="button"
                   className="product-buy-now-btn"
                   onClick={handleBuyNow}
+                  disabled={Number(product.stock || 0) <= 0}
                 >
                   Buy now
                 </button>

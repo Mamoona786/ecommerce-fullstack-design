@@ -39,49 +39,59 @@ function Cart() {
   const [checkingOut, setCheckingOut] = useState(false);
 
   const normalizeCartItems = (items = []) => {
-    return items.map((item) => {
-      const stock = Number(item.stock ?? item.productStock ?? 0);
-      const quantity = Number(item.quantity || 0);
+  console.log("normalizeCartItems input:", items);
 
-      return {
-        ...item,
-        price: Number(item.price || 0),
-        quantity,
-        stock,
-        isOutOfStock: stock === 0,
-        insufficientStock: quantity > stock && stock > 0,
-      };
-    });
-  };
+  return items.map((item) => {
+    const stock = Number(item.stock ?? item.productStock ?? 999);
+    const quantity = Number(item.quantity || 0);
+
+    return {
+      ...item,
+      id: item.id || item.product,
+      product: item.product || item.id,
+      name: item.name || item.title || "",
+      title: item.title || item.name || "",
+      price: Number(item.price || 0),
+      quantity,
+      stock,
+      isOutOfStock: stock === 0,
+      insufficientStock: quantity > stock && stock > 0,
+    };
+  });
+};
 
   useEffect(() => {
-    const loadCart = async () => {
-      try {
-        setLoading(true);
+  const loadCart = async () => {
+    try {
+      setLoading(true);
 
-        if (isAuthenticated) {
-          const data = await getMyCart();
-          setCartItems(normalizeCartItems(data?.items || []));
-        } else {
-          const items = getCartItems();
-          setCartItems(normalizeCartItems(items));
-        }
-      } catch (error) {
-        console.error("Failed to load cart:", error);
-        setCartItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      if (isAuthenticated) {
+  const data = await getMyCart();
+  const items = data?.cart?.items || data?.items || [];
+  setCartItems(normalizeCartItems(items));
+} else {
+  const items = getCartItems();
+  setCartItems(normalizeCartItems(items));
+}
+    } catch (error) {
+      console.error("Failed to load cart:", error);
+      console.error("Cart fetch error response:", error?.response?.data);
+      setCartItems([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    loadCart();
-  }, [isAuthenticated]);
+  loadCart();
+}, [isAuthenticated]);
+
 
   const handleQuantityChange = async (id, value) => {
     try {
       if (isAuthenticated) {
         const data = await updateCartItemQty(id, Number(value));
-        setCartItems(normalizeCartItems(data?.cart?.items || []));
+        const items = data?.items || data?.cart?.items || [];
+        setCartItems(normalizeCartItems(items));
       } else {
         const updated = updateGuestCartItemQty(id, Number(value));
         setCartItems(normalizeCartItems(updated));
@@ -95,7 +105,8 @@ function Cart() {
     try {
       if (isAuthenticated) {
         const data = await removeCartItem(id);
-        setCartItems(normalizeCartItems(data?.cart?.items || []));
+        const items = data?.items || data?.cart?.items || [];
+        setCartItems(normalizeCartItems(items));
       } else {
         const updated = removeGuestCartItem(id);
         setCartItems(normalizeCartItems(updated));
@@ -109,7 +120,8 @@ function Cart() {
     try {
       if (isAuthenticated) {
         const data = await clearCart();
-        setCartItems(normalizeCartItems(data?.cart?.items || []));
+        const items = data?.items || data?.cart?.items || [];
+        setCartItems(normalizeCartItems(items));
       } else {
         const updated = clearGuestCart();
         setCartItems(normalizeCartItems(updated));

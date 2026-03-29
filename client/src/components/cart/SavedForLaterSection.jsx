@@ -6,8 +6,8 @@ import { FiShoppingCart } from "react-icons/fi";
 // import watchImg from "../../assets/watch.png";
 // import laptopImg from "../../assets/laptop.png";
 
-const phoneImg = "/phone.png";
-const phone2Img = "/phone2.png";
+const phoneImg = "/phone2.png";
+const phone2Img = "/blue-phone2a.png";
 const watchImg = "/watch.png";
 const laptopImg = "/laptop.png";
 
