@@ -8,13 +8,7 @@ export const matchesRating = (productRating, selectedRatings) => {
 
   const numericRating = Number(productRating) || 0;
 
-  return selectedRatings.some((rating) => {
-    if (rating === 5) return numericRating >= 9;
-    if (rating === 4) return numericRating >= 7;
-    if (rating === 3) return numericRating >= 5;
-    if (rating === 2) return numericRating >= 3;
-    return true;
-  });
+  return selectedRatings.some((rating) => numericRating >= rating);
 };
 
 export const normalizeText = (value) => String(value || "").toLowerCase().trim();

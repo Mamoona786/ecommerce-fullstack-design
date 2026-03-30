@@ -32,7 +32,7 @@ const cartItemSchema = new mongoose.Schema(
       default: "",
     },
   },
-  { _id: false }
+  { _id: true }
 );
 
 const cartSchema = new mongoose.Schema(
@@ -42,6 +42,11 @@ const cartSchema = new mongoose.Schema(
       ref: "User",
       required: true,
       unique: true,
+    },
+    status: {
+      type: String,
+      enum: ["active", "checked_out", "abandoned"],
+      default: "active",
     },
     items: [cartItemSchema],
   },

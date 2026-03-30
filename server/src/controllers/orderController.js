@@ -28,7 +28,7 @@ export const checkoutCart = async (req, res) => {
       const product = await Product.findById(item.product).session(session);
 
       if (!product) {
-        throw new Error(`${item.title || item.name || "Product"} not found`);
+        throw new Error(`${item.title || "Product"} not found`);
       }
 
       if (product.stock < item.quantity) {
@@ -43,6 +43,7 @@ export const checkoutCart = async (req, res) => {
 
       product.stock -= item.quantity;
       product.stockStatus = getStockStatus(product.stock);
+      product.sold += item.quantity;
 
       await product.save({ session });
     }
@@ -61,7 +62,7 @@ export const checkoutCart = async (req, res) => {
           user: req.user._id,
           items: cart.items.map((item) => ({
             product: item.product,
-            title: item.title || item.name,
+            title: item.title,
             image: item.image,
             price: Number(item.price || 0),
             quantity: item.quantity,
@@ -78,6 +79,7 @@ export const checkoutCart = async (req, res) => {
     );
 
     cart.items = [];
+    cart.status = "active";
     await cart.save({ session });
 
     await session.commitTransaction();

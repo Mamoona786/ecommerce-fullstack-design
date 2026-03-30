@@ -2,13 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaHeart, FaStar, FaRegStar } from "react-icons/fa";
 
+const formatCurrency = (value) => `$${Number(value || 0).toFixed(2)}`;
+
 const ProductGridCard = ({ product }) => {
+  const productId = product._id || product.id;
+  const productName = product.name || product.title;
+
   return (
     <article className="product-grid-card">
-      <Link to={`/products/${product._id}`} className="product-grid-image-wrap">
+      <Link to={`/products/${productId}`} className="product-grid-image-wrap">
         <img
           src={product.image}
-          alt={product.title}
+          alt={productName}
           className="product-grid-image"
         />
       </Link>
@@ -16,9 +21,11 @@ const ProductGridCard = ({ product }) => {
       <div className="product-grid-body">
         <div className="product-grid-top">
           <div className="product-grid-price-wrap">
-            <span className="product-grid-price">{product.price}</span>
-            {product.oldPrice ? (
-              <span className="product-grid-old-price">{product.oldPrice}</span>
+            <span className="product-grid-price">{formatCurrency(product.price)}</span>
+            {Number(product.oldPrice || 0) > 0 ? (
+              <span className="product-grid-old-price">
+                {formatCurrency(product.oldPrice)}
+              </span>
             ) : null}
           </div>
 
@@ -27,8 +34,8 @@ const ProductGridCard = ({ product }) => {
           </button>
         </div>
 
-        <Link to={`/products/${product._id}`} className="product-grid-title-link">
-          <h3 className="product-grid-title">{product.title}</h3>
+        <Link to={`/products/${productId}`} className="product-grid-title-link">
+          <h3 className="product-grid-title">{productName}</h3>
         </Link>
 
         <div className="product-grid-meta">

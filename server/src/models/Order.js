@@ -31,7 +31,7 @@ const orderItemSchema = new mongoose.Schema(
       default: "",
     },
   },
-  { _id: false }
+  { _id: true }
 );
 
 const orderSchema = new mongoose.Schema(

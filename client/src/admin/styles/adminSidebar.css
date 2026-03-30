@@ -1,0 +1,154 @@
+.admin-sidebar {
+  width: 240px;
+  min-width: 240px;
+  height: 100vh;
+  background: linear-gradient(180deg, #58c5a4 0%, #55c7a2 100%);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+.admin-sidebar-top {
+  padding: 18px 14px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  min-height: 94px;
+  display: flex;
+  align-items: center;
+}
+
+.admin-sidebar-brand-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-sidebar-brand {
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.2px;
+}
+
+.admin-sidebar-collapse-btn {
+  border: none;
+  background: transparent;
+  color: #f4fffb;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.admin-sidebar-menu {
+  padding: 14px 12px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.admin-sidebar-item,
+.admin-sidebar-subitem {
+  text-decoration: none;
+}
+
+.admin-sidebar-item {
+  width: 100%;
+  min-height: 46px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 12px;
+  padding: 0 12px 0 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.admin-sidebar-item-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-sidebar-icon {
+  font-size: 15px;
+  min-width: 14px;
+}
+
+.admin-sidebar-item-card {
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.admin-sidebar-item-card.active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.admin-sidebar-item.active-plain {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-sidebar-arrow-circle {
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-sidebar-arrow {
+  font-size: 10px;
+  transition: transform 0.25s ease;
+}
+
+.admin-sidebar-arrow.rotate {
+  transform: rotate(90deg);
+}
+
+.admin-sidebar-group {
+  margin-bottom: 4px;
+}
+
+.admin-sidebar-submenu {
+  padding-left: 16px;
+  margin-top: -2px;
+  margin-bottom: 8px;
+}
+
+.admin-sidebar-subitem {
+  min-height: 36px;
+  color: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  padding: 0 10px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.admin-sidebar-subitem.active-sub {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.admin-sidebar-subicon {
+  font-size: 11px;
+}
+
+.admin-sidebar-bottom-line {
+  height: 6px;
+  margin: 0 14px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.23);
+}

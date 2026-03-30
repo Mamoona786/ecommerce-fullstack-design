@@ -23,6 +23,7 @@ export const registerUser = async (req, res) => {
       username,
       email,
       password,
+      role: "user",
     });
 
     res.status(201).json({
@@ -32,9 +33,11 @@ export const registerUser = async (req, res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
+    console.error("Registration failed:", error.message);
     res.status(500).json({ message: "Registration failed" });
   }
 };
@@ -66,9 +69,11 @@ export const loginUser = async (req, res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
+    console.error("Login failed:", error.message);
     res.status(500).json({ message: "Login failed" });
   }
 };

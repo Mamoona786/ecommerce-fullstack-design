@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff, FiMail } from "react-icons/fi";
 import "../styles/register.css";
-
-// import registerHeroImg from "../../images/login-hero.png";
 import { registerUser } from "../services/authService";
 
 const registerHeroImg = "/login-hero.png";
 
 const Register = () => {
   const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
 
-  // ✅ form state
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -24,7 +19,6 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ handle change
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -32,34 +26,30 @@ const Register = () => {
     }));
   };
 
-  // ✅ handle submit
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      setLoading(true);
-      setError("");
+  try {
+    setLoading(true);
+    setError("");
 
-      const data = await registerUser(formData);
+    const data = await registerUser(formData);
 
-      // save token + user
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
 
-      // redirect
-      navigate("/");
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+    navigate("/");
+  } catch (err) {
+    setError(err.response?.data?.message || "Registration failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="register-page">
       <div className="register-shell">
         <div className="register-card">
-          {/* LEFT SIDE */}
           <div className="register-left">
             <div className="register-left-inner">
               <p className="register-welcome-small">Nice to see you again</p>
@@ -87,7 +77,6 @@ const Register = () => {
             </div>
           </div>
 
-          {/* RIGHT SIDE */}
           <div className="register-right">
             <div className="register-brand">eCommerce Store</div>
 
@@ -96,7 +85,6 @@ const Register = () => {
               <p>Create an account to access all our awesome features.</p>
             </div>
 
-            {/* ✅ FORM */}
             <form className="register-form" onSubmit={handleSubmit}>
               <div className="register-field">
                 <label htmlFor="username">Enter your username</label>
@@ -148,11 +136,8 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* ✅ ERROR */}
               {error && (
-                <p style={{ color: "red", marginBottom: "10px" }}>
-                  {error}
-                </p>
+                <p style={{ color: "red", marginBottom: "10px" }}>{error}</p>
               )}
 
               <button

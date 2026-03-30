@@ -1,11 +1,6 @@
 import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
 
-// import phoneImg from "../../assets/phone.png";
-// import phone2Img from "../../assets/phone2.png";
-// import watchImg from "../../assets/watch.png";
-// import laptopImg from "../../assets/laptop.png";
-
 const phoneImg = "/phone2.png";
 const phone2Img = "/blue-phone2a.png";
 const watchImg = "/watch.png";
@@ -16,25 +11,25 @@ const savedItems = [
     id: 1,
     image: phoneImg,
     price: "$99.50",
-    title: "GoPro HERO6 4K Action Camera - Black",
+    title: "Smartphone for daily use",
   },
   {
     id: 2,
     image: phone2Img,
-    price: "$99.50",
-    title: "GoPro HERO6 4K Action Camera - Black",
+    price: "$119.50",
+    title: "Premium blue smartphone",
   },
   {
     id: 3,
     image: watchImg,
-    price: "$99.50",
-    title: "GoPro HERO6 4K Action Camera - Black",
+    price: "$89.50",
+    title: "Smart watch with modern features",
   },
   {
     id: 4,
     image: laptopImg,
-    price: "$99.50",
-    title: "GoPro HERO6 4K Action Camera - Black",
+    price: "$699.00",
+    title: "Reliable laptop for work and study",
   },
 ];
 

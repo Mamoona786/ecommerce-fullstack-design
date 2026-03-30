@@ -9,13 +9,11 @@ const ProductListCard = ({ product }) => {
 
   const productId = product._id || product.id;
   const productName = product.name || product.title;
+  const categoryName = product?.category?.category_name || product?.category || "";
 
   return (
     <article className="product-list-card">
-      <Link
-        to={`/products/${productId}`}
-        className="product-list-image-wrap"
-      >
+      <Link to={`/products/${productId}`} className="product-list-image-wrap">
         <img
           src={product.image}
           alt={productName}
@@ -61,6 +59,12 @@ const ProductListCard = ({ product }) => {
           <span className="product-shipping">{product.shipping}</span>
           <span className="product-dot">•</span>
           <span className="product-shipping">{product.stockStatus}</span>
+          {categoryName ? (
+            <>
+              <span className="product-dot">•</span>
+              <span className="product-shipping">{categoryName}</span>
+            </>
+          ) : null}
         </div>
 
         <p className="product-description">

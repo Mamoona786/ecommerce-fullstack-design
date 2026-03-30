@@ -6,19 +6,19 @@ const benefits = [
     id: 1,
     icon: <FiLock />,
     title: "Secure payment",
-    text: "Have you ever finally just",
+    text: "Safe and protected checkout experience for every order.",
   },
   {
     id: 2,
     icon: <FiMessageSquare />,
     title: "Customer support",
-    text: "Have you ever finally just",
+    text: "Friendly support whenever you need help with your purchase.",
   },
   {
     id: 3,
     icon: <FiTruck />,
     title: "Free delivery",
-    text: "Have you ever finally just",
+    text: "Fast and reliable delivery for eligible products.",
   },
 ];
 

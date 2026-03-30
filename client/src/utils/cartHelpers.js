@@ -25,16 +25,20 @@ export const addCartItem = ({ product, quantity = 1, selectedTierPrice }) => {
   const price = Number(selectedTierPrice || product?.price || 0);
 
   if (existingIndex > -1) {
+    const nextQty = items[existingIndex].quantity + qty;
+
     items[existingIndex] = {
       ...items[existingIndex],
-      quantity: items[existingIndex].quantity + qty,
+      quantity: nextQty,
       price,
       stock,
     };
   } else {
     items.push({
       id: productId,
+      product: productId,
       name: product?.name || product?.title || "",
+      title: product?.name || product?.title || "",
       image: product?.image || "",
       price,
       quantity: qty,
@@ -51,7 +55,9 @@ export const updateCartItemQty = (id, quantity) => {
   const items = getCartItems();
 
   const updated = items.map((item) =>
-    String(item.id) === String(id) ? { ...item, quantity: Number(quantity) } : item
+    String(item.id) === String(id)
+      ? { ...item, quantity: Number(quantity) }
+      : item
   );
 
   saveCartItems(updated);

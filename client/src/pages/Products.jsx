@@ -21,6 +21,7 @@ function Products() {
 
   const search = searchParams.get("search") || "";
   const category = searchParams.get("category") || "";
+  const seller = searchParams.get("seller") || "";
   const urlSort = searchParams.get("sort") || "featured";
   const urlPage = Number(searchParams.get("page")) || 1;
   const urlView = searchParams.get("view") || "list";
@@ -70,6 +71,7 @@ function Products() {
         const filters = {};
         if (search.trim()) filters.search = search.trim();
         if (category.trim()) filters.category = category.trim();
+        if (seller.trim()) filters.seller = seller.trim();
 
         const data = await getAllProducts(filters);
         setProducts(Array.isArray(data?.products) ? data.products : []);
@@ -82,7 +84,7 @@ function Products() {
     };
 
     fetchProducts();
-  }, [search, category]);
+  }, [search, category, seller]);
 
   const handleUpdateParams = (updates = {}) => {
     const nextParams = new URLSearchParams(searchParams);
@@ -99,10 +101,12 @@ function Products() {
   };
 
   const handleCategoryChange = (value) => {
-    setSelectedCategory(value);
+    const finalValue = selectedCategory === value ? "" : value;
+    setSelectedCategory(finalValue);
     setCurrentPage(1);
+
     handleUpdateParams({
-      category: value || "",
+      category: finalValue || "",
       page: 1,
     });
   };

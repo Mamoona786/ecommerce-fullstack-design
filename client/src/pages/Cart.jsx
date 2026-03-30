@@ -39,58 +39,66 @@ function Cart() {
   const [checkingOut, setCheckingOut] = useState(false);
 
   const normalizeCartItems = (items = []) => {
-  console.log("normalizeCartItems input:", items);
+    return items.map((item) => {
+      const productId =
+        typeof item.product === "object" && item.product !== null
+          ? item.product._id || item.product.id
+          : item.product || item.id;
 
-  return items.map((item) => {
-    const stock = Number(item.stock ?? item.productStock ?? 999);
-    const quantity = Number(item.quantity || 0);
+      const stockValue =
+        typeof item.product === "object" && item.product !== null
+          ? Number(item.product.stock ?? 0)
+          : item.stock ?? item.productStock ?? null;
 
-    return {
-      ...item,
-      id: item.id || item.product,
-      product: item.product || item.id,
-      name: item.name || item.title || "",
-      title: item.title || item.name || "",
-      price: Number(item.price || 0),
-      quantity,
-      stock,
-      isOutOfStock: stock === 0,
-      insufficientStock: quantity > stock && stock > 0,
-    };
-  });
-};
+      const quantity = Number(item.quantity || 0);
+      const hasKnownStock = stockValue !== null && !Number.isNaN(Number(stockValue));
+      const stock = hasKnownStock ? Number(stockValue) : null;
 
-  useEffect(() => {
-  const loadCart = async () => {
-    try {
-      setLoading(true);
-
-      if (isAuthenticated) {
-  const data = await getMyCart();
-  const items = data?.cart?.items || data?.items || [];
-  setCartItems(normalizeCartItems(items));
-} else {
-  const items = getCartItems();
-  setCartItems(normalizeCartItems(items));
-}
-    } catch (error) {
-      console.error("Failed to load cart:", error);
-      console.error("Cart fetch error response:", error?.response?.data);
-      setCartItems([]);
-    } finally {
-      setLoading(false);
-    }
+      return {
+        ...item,
+        id: item.id || productId,
+        product: productId,
+        name: item.name || item.title || "",
+        title: item.title || item.name || "",
+        price: Number(item.price || 0),
+        quantity,
+        stock,
+        hasKnownStock,
+        isOutOfStock: hasKnownStock ? stock === 0 : false,
+        insufficientStock: hasKnownStock ? quantity > stock && stock > 0 : false,
+      };
+    });
   };
 
-  loadCart();
-}, [isAuthenticated]);
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        setLoading(true);
 
+        if (isAuthenticated) {
+          const data = await getMyCart();
+          const items = data?.cart?.items || [];
+          setCartItems(normalizeCartItems(items));
+        } else {
+          const items = getCartItems();
+          setCartItems(normalizeCartItems(items));
+        }
+      } catch (error) {
+        console.error("Failed to load cart:", error);
+        setCartItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCart();
+  }, [isAuthenticated]);
 
   const handleQuantityChange = async (id, value) => {
     try {
       if (isAuthenticated) {
         const data = await updateCartItemQty(id, Number(value));
-        const items = data?.items || data?.cart?.items || [];
+        const items = data?.cart?.items || data?.items || [];
         setCartItems(normalizeCartItems(items));
       } else {
         const updated = updateGuestCartItemQty(id, Number(value));
@@ -98,6 +106,7 @@ function Cart() {
       }
     } catch (error) {
       console.error("Failed to update quantity:", error);
+      alert(error?.response?.data?.message || "Failed to update quantity");
     }
   };
 
@@ -105,7 +114,7 @@ function Cart() {
     try {
       if (isAuthenticated) {
         const data = await removeCartItem(id);
-        const items = data?.items || data?.cart?.items || [];
+        const items = data?.cart?.items || data?.items || [];
         setCartItems(normalizeCartItems(items));
       } else {
         const updated = removeGuestCartItem(id);
@@ -113,6 +122,7 @@ function Cart() {
       }
     } catch (error) {
       console.error("Failed to remove item:", error);
+      alert(error?.response?.data?.message || "Failed to remove item");
     }
   };
 
@@ -120,7 +130,7 @@ function Cart() {
     try {
       if (isAuthenticated) {
         const data = await clearCart();
-        const items = data?.items || data?.cart?.items || [];
+        const items = data?.cart?.items || data?.items || [];
         setCartItems(normalizeCartItems(items));
       } else {
         const updated = clearGuestCart();
@@ -128,6 +138,7 @@ function Cart() {
       }
     } catch (error) {
       console.error("Failed to clear cart:", error);
+      alert(error?.response?.data?.message || "Failed to clear cart");
     }
   };
 

@@ -3,6 +3,7 @@ dotenv.config();
 
 import mongoose from "mongoose";
 import connectDB from "../config/db.js";
+import Category from "../models/Category.js";
 import Product from "../models/Product.js";
 
 const commonSeller = {
@@ -19,7 +20,7 @@ const createProduct = ({
   thumbnails = [],
   price,
   oldPrice = 0,
-  category,
+  categoryName,
   subCategory = "",
   brand = "",
   sku = "",
@@ -43,7 +44,7 @@ const createProduct = ({
   thumbnails,
   price,
   oldPrice,
-  category,
+  categoryName,
   subCategory,
   brand,
   sku,
@@ -64,7 +65,7 @@ const createProduct = ({
   isActive,
 });
 
-const sampleProducts = [
+const rawProducts = [
   createProduct({
     name: "Soft Chairs",
     image: "/soft-chairs.png",
@@ -78,7 +79,7 @@ const sampleProducts = [
     ],
     price: 79,
     oldPrice: 99,
-    category: "Home & Living",
+    categoryName: "Home & Living",
     subCategory: "Chairs",
     brand: "ComfortNest",
     sku: "CHR-SFT-001",
@@ -134,7 +135,7 @@ const sampleProducts = [
     ],
     price: 45,
     oldPrice: 59,
-    category: "Home & Living",
+    categoryName: "Home & Living",
     subCategory: "Lighting",
     brand: "LumaHome",
     sku: "LMP-HM-002",
@@ -190,7 +191,7 @@ const sampleProducts = [
     ],
     price: 220,
     oldPrice: 260,
-    category: "Home & Living",
+    categoryName: "Home & Living",
     subCategory: "Bedroom",
     brand: "SleepEase",
     sku: "MAT-BR-003",
@@ -246,7 +247,7 @@ const sampleProducts = [
     ],
     price: 34,
     oldPrice: 44,
-    category: "Kitchen & Dining",
+    categoryName: "Kitchen & Dining",
     subCategory: "Cookware",
     brand: "CookElite",
     sku: "POT-KT-004",
@@ -302,7 +303,7 @@ const sampleProducts = [
     ],
     price: 95,
     oldPrice: 120,
-    category: "Kitchen Appliances",
+    categoryName: "Kitchen Appliances",
     subCategory: "Juicers",
     brand: "FreshMix",
     sku: "JCR-KA-005",
@@ -358,7 +359,7 @@ const sampleProducts = [
     ],
     price: 59,
     oldPrice: 75,
-    category: "Kitchen Appliances",
+    categoryName: "Kitchen Appliances",
     subCategory: "Blenders",
     brand: "BlendPro",
     sku: "BLD-KA-006",
@@ -414,7 +415,7 @@ const sampleProducts = [
     ],
     price: 68,
     oldPrice: 82,
-    category: "Office & Storage",
+    categoryName: "Office & Storage",
     subCategory: "Storage Rack",
     brand: "SpaceLine",
     sku: "RCK-OF-007",
@@ -470,7 +471,7 @@ const sampleProducts = [
     ],
     price: 22,
     oldPrice: 29,
-    category: "Home & Garden",
+    categoryName: "Home & Garden",
     subCategory: "Indoor Plants",
     brand: "GreenNest",
     sku: "PLT-GR-008",
@@ -526,7 +527,7 @@ const sampleProducts = [
     ],
     price: 129,
     oldPrice: 159,
-    category: "Electronics",
+    categoryName: "Electronics",
     subCategory: "Wearables",
     brand: "TechTime",
     sku: "SWT-EL-009",
@@ -582,7 +583,7 @@ const sampleProducts = [
     ],
     price: 289,
     oldPrice: 329,
-    category: "Electronics",
+    categoryName: "Electronics",
     subCategory: "Cameras",
     brand: "SnapPro",
     sku: "CAM-EL-010",
@@ -638,7 +639,7 @@ const sampleProducts = [
     ],
     price: 49,
     oldPrice: 65,
-    category: "Electronics",
+    categoryName: "Electronics",
     subCategory: "Audio",
     brand: "SoundBeat",
     sku: "HPH-EL-011",
@@ -694,7 +695,7 @@ const sampleProducts = [
     ],
     price: 42,
     oldPrice: 55,
-    category: "Kitchen Appliances",
+    categoryName: "Kitchen Appliances",
     subCategory: "Kettles",
     brand: "QuickBoil",
     sku: "KTL-KA-012",
@@ -750,7 +751,7 @@ const sampleProducts = [
     ],
     price: 69,
     oldPrice: 89,
-    category: "Electronics",
+    categoryName: "Electronics",
     subCategory: "Gaming Audio",
     brand: "GameX",
     sku: "GHS-EL-013",
@@ -806,7 +807,7 @@ const sampleProducts = [
     ],
     price: 699,
     oldPrice: 799,
-    category: "Computers",
+    categoryName: "Computers",
     subCategory: "Laptops",
     brand: "NextCore",
     sku: "LTP-CM-014",
@@ -862,7 +863,7 @@ const sampleProducts = [
     ],
     price: 399,
     oldPrice: 449,
-    category: "Mobiles",
+    categoryName: "Mobiles",
     subCategory: "Smartphones",
     brand: "NovaMobile",
     sku: "PHN-MB-015",
@@ -918,7 +919,7 @@ const sampleProducts = [
     ],
     price: 429,
     oldPrice: 479,
-    category: "Mobiles",
+    categoryName: "Mobiles",
     subCategory: "Smartphones",
     brand: "NovaMobile",
     sku: "PHN-MB-016",
@@ -962,26 +963,75 @@ const sampleProducts = [
   }),
 ];
 
+const categoryDefinitions = [
+  {
+    category_name: "Home & Living",
+    description: "Furniture and home lifestyle products",
+  },
+  {
+    category_name: "Kitchen & Dining",
+    description: "Kitchen cookware and dining essentials",
+  },
+  {
+    category_name: "Kitchen Appliances",
+    description: "Modern appliances for kitchen use",
+  },
+  {
+    category_name: "Office & Storage",
+    description: "Office organization and storage products",
+  },
+  {
+    category_name: "Home & Garden",
+    description: "Home décor and garden-related products",
+  },
+  {
+    category_name: "Electronics",
+    description: "Electronic devices and accessories",
+  },
+  {
+    category_name: "Computers",
+    description: "Computer systems and accessories",
+  },
+  {
+    category_name: "Mobiles",
+    description: "Mobile phones and smartphone products",
+  },
+];
+
 const seed = async () => {
   try {
     await connectDB();
+
     await Product.deleteMany({});
+    await Category.deleteMany({});
 
-    const inserted = await Product.insertMany(sampleProducts);
+    const insertedCategories = await Category.insertMany(categoryDefinitions);
 
-    for (let i = 0; i < inserted.length; i++) {
-      const current = inserted[i];
+    const categoryMap = insertedCategories.reduce((acc, category) => {
+      acc[category.category_name] = category._id;
+      return acc;
+    }, {});
 
-      const sameCategory = inserted
+    const mappedProducts = rawProducts.map(({ categoryName, ...product }) => ({
+      ...product,
+      category: categoryMap[categoryName],
+    }));
+
+    const insertedProducts = await Product.insertMany(mappedProducts);
+
+    for (let i = 0; i < insertedProducts.length; i++) {
+      const current = insertedProducts[i];
+
+      const sameCategory = insertedProducts
         .filter(
           (item) =>
             String(item._id) !== String(current._id) &&
-            item.category === current.category
+            String(item.category) === String(current.category)
         )
         .slice(0, 6)
         .map((item) => item._id);
 
-      const mixedSuggestions = inserted
+      const mixedSuggestions = insertedProducts
         .filter((item) => String(item._id) !== String(current._id))
         .slice(0, 5)
         .map((item) => item._id);
@@ -992,7 +1042,9 @@ const seed = async () => {
       });
     }
 
-    console.log(`Seeded ${inserted.length} products successfully`);
+    console.log(`Seeded ${insertedCategories.length} categories successfully`);
+    console.log(`Seeded ${insertedProducts.length} products successfully`);
+
     await mongoose.connection.close();
     process.exit(0);
   } catch (error) {

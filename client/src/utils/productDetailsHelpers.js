@@ -4,7 +4,6 @@ export const getUniqueProductImages = (product) => {
   if (!product) return [];
 
   const rawImages = [product.image, ...(product.thumbnails || [])].filter(Boolean);
-
   return [...new Set(rawImages)];
 };
 
@@ -23,19 +22,21 @@ export const isProductSaved = (productId) => {
 
 export const toggleSavedProduct = (product) => {
   const savedProducts = getSavedProducts();
-  const exists = savedProducts.some((item) => String(item.id) === String(product._id));
+  const productId = product._id || product.id;
+
+  const exists = savedProducts.some((item) => String(item.id) === String(productId));
 
   let updatedProducts = [];
 
   if (exists) {
     updatedProducts = savedProducts.filter(
-      (item) => String(item.id) !== String(product._id)
+      (item) => String(item.id) !== String(productId)
     );
   } else {
     updatedProducts = [
       ...savedProducts,
       {
-        id: product._id,
+        id: productId,
         title: product.name || product.title,
         image: product.image,
         price: product.price,
@@ -70,10 +71,15 @@ export const addProductToCart = async ({
   selectedTierPrice = "",
 }) => {
   const token = localStorage.getItem("token");
+  const productId = product?._id || product?.id;
+
+  if (!productId) {
+    throw new Error("Product ID is missing");
+  }
 
   if (token) {
     const response = await addToCartApi({
-      productId: product._id,
+      productId,
       quantity,
       selectedTierPrice,
     });
@@ -84,18 +90,19 @@ export const addProductToCart = async ({
   const cartItems = getGuestCartItems();
 
   const existingItem = cartItems.find(
-    (item) => String(item.id) === String(product._id)
+    (item) => String(item.id) === String(productId)
   );
 
   const itemPrice = parsePrice(selectedTierPrice || product.price);
 
   if (existingItem) {
     const updatedItems = cartItems.map((item) =>
-      String(item.id) === String(product._id)
+      String(item.id) === String(productId)
         ? {
             ...item,
             quantity: item.quantity + quantity,
             price: itemPrice,
+            stock: Number(product?.stock || 0),
           }
         : item
     );
@@ -105,13 +112,20 @@ export const addProductToCart = async ({
   }
 
   const newItem = {
-    id: product._id,
+    id: productId,
+    product: productId,
     title: product.name || product.title,
-    details: product.shortDescription || product.category || "",
+    name: product.name || product.title,
+    details:
+      product.shortDescription ||
+      product?.category?.category_name ||
+      product.category ||
+      "",
     seller: product?.seller?.name || "Unknown seller",
     image: product.image,
     price: itemPrice,
     quantity,
+    stock: Number(product?.stock || 0),
   };
 
   const updatedItems = [...cartItems, newItem];

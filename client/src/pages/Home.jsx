@@ -43,14 +43,14 @@ const Home = () => {
 
   const homeOutdoorItems = useMemo(() => {
     const homeMatches = products.filter((product) => {
-      const category = (product.category || "").toLowerCase();
+      const categoryName = (product.category?.category_name || "").toLowerCase();
       const subCategory = (product.subCategory || "").toLowerCase();
 
       return (
-        category.includes("home") ||
-        category.includes("kitchen") ||
-        category.includes("garden") ||
-        category.includes("office") ||
+        categoryName.includes("home") ||
+        categoryName.includes("kitchen") ||
+        categoryName.includes("garden") ||
+        categoryName.includes("office") ||
         subCategory.includes("chairs") ||
         subCategory.includes("lighting") ||
         subCategory.includes("bedroom") ||
@@ -71,7 +71,7 @@ const Home = () => {
       name: product.name,
       price: product.price,
       image: product.image,
-      category: product.category,
+      category: product.category?.category_name || "",
       stock: product.stock,
       stockStatus: product.stockStatus,
     }));
@@ -79,13 +79,13 @@ const Home = () => {
 
   const electronicsItems = useMemo(() => {
     const electronicsMatches = products.filter((product) => {
-      const category = (product.category || "").toLowerCase();
+      const categoryName = (product.category?.category_name || "").toLowerCase();
       const subCategory = (product.subCategory || "").toLowerCase();
 
       return (
-        category.includes("electronics") ||
-        category.includes("computer") ||
-        category.includes("mobile") ||
+        categoryName.includes("electronics") ||
+        categoryName.includes("computer") ||
+        categoryName.includes("mobile") ||
         subCategory.includes("wearables") ||
         subCategory.includes("cameras") ||
         subCategory.includes("audio") ||
@@ -105,7 +105,7 @@ const Home = () => {
       name: product.name,
       price: product.price,
       image: product.image,
-      category: product.category,
+      category: product.category?.category_name || "",
       stock: product.stock,
       stockStatus: product.stockStatus,
     }));
@@ -121,9 +121,9 @@ const Home = () => {
         product.subtitle ||
         product.shortDescription ||
         product.subCategory ||
-        product.category ||
+        product.category?.category_name ||
         "",
-      category: product.category,
+      category: product.category?.category_name || "",
       stock: product.stock,
       stockStatus: product.stockStatus,
     }));

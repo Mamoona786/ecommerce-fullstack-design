@@ -1,9 +1,14 @@
 import React from "react";
 
 function CartItem({ item, isLast, onQuantityChange, onRemove }) {
-  const isOutOfStock = item.stock === 0;
-  const insufficientStock = item.quantity > item.stock && item.stock > 0;
+  const isOutOfStock = item.hasKnownStock ? item.stock === 0 : false;
+  const insufficientStock =
+    item.hasKnownStock ? item.quantity > item.stock && item.stock > 0 : false;
   const productName = item.name || item.title;
+
+  const maxSelectQty = item.hasKnownStock
+    ? Math.max(item.stock, 1)
+    : Math.max(item.quantity, 10);
 
   return (
     <div className={`cart-item ${isLast ? "last" : ""} ${isOutOfStock ? "opacity-50" : ""}`}>
@@ -16,16 +21,18 @@ function CartItem({ item, isLast, onQuantityChange, onRemove }) {
           {productName}
         </h6>
 
-        {isOutOfStock ? (
-          <span className="text-danger fw-bold text-decoration-line-through">
-            Out of Stock
-          </span>
-        ) : insufficientStock ? (
-          <span className="text-warning fw-bold">
-            Only {item.stock} left
-          </span>
+        {item.hasKnownStock ? (
+          isOutOfStock ? (
+            <span className="text-danger fw-bold text-decoration-line-through">
+              Out of Stock
+            </span>
+          ) : insufficientStock ? (
+            <span className="text-warning fw-bold">Only {item.stock} left</span>
+          ) : (
+            <span className="text-success fw-bold">In Stock</span>
+          )
         ) : (
-          <span className="text-success fw-bold">In Stock</span>
+          <span className="text-success fw-bold">Available</span>
         )}
 
         <p>${Number(item.price || 0).toFixed(2)}</p>
@@ -36,7 +43,7 @@ function CartItem({ item, isLast, onQuantityChange, onRemove }) {
             onChange={(e) => onQuantityChange(item.product || item.id, e.target.value)}
             disabled={isOutOfStock}
           >
-            {[...Array(Math.max(item.stock, 1)).keys()].map((num) => (
+            {[...Array(maxSelectQty).keys()].map((num) => (
               <option key={num + 1} value={num + 1}>
                 Qty: {num + 1}
               </option>

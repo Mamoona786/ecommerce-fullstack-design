@@ -1,4 +1,5 @@
 import Product from "../models/Product.js";
+import Category from "../models/Category.js";
 
 const parseSortOption = (sort) => {
   switch (sort) {
@@ -38,12 +39,26 @@ export const getProducts = async (req, res) => {
       filter.name = { $regex: search.trim(), $options: "i" };
     }
 
-    if (category.trim() && category !== "All category") {
-      filter.category = { $regex: `^${category.trim()}$`, $options: "i" };
-    }
-
     if (seller.trim()) {
       filter["seller.name"] = { $regex: seller.trim(), $options: "i" };
+    }
+
+    if (category.trim() && category !== "All category") {
+      const matchedCategory = await Category.findOne({
+        category_name: { $regex: `^${category.trim()}$`, $options: "i" },
+      });
+
+      if (!matchedCategory) {
+        return res.status(200).json({
+          products: [],
+          total: 0,
+          page: Number(page) || 1,
+          limit: Number(limit) || 100,
+          totalPages: 0,
+        });
+      }
+
+      filter.category = matchedCategory._id;
     }
 
     const pageNumber = Number(page) || 1;
@@ -53,6 +68,7 @@ export const getProducts = async (req, res) => {
     const total = await Product.countDocuments(filter);
 
     const products = await Product.find(filter)
+      .populate("category", "category_name description")
       .sort(parseSortOption(sort))
       .skip(skip)
       .limit(pageLimit)
@@ -74,6 +90,7 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id)
+      .populate("category", "category_name description")
       .populate("relatedIds")
       .populate("youMayLikeIds")
       .select("-__v");

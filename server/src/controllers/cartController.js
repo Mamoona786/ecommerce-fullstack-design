@@ -12,6 +12,7 @@ const getOrCreateCart = async (userId) => {
   if (!cart) {
     cart = await Cart.create({
       user: userId,
+      status: "active",
       items: [],
     });
   }
@@ -46,29 +47,44 @@ export const addToCart = async (req, res) => {
       return res.status(400).json({ message: "Quantity must be at least 1" });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate("category");
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
+    if (product.stock < qty) {
+      return res.status(400).json({
+        message: `Only ${product.stock} item(s) available in stock`,
+      });
+    }
+
     const cart = await getOrCreateCart(req.user._id);
 
     const itemPrice = parsePrice(selectedTierPrice || product.price);
+
     const existingItemIndex = cart.items.findIndex(
       (item) => String(item.product) === String(product._id)
     );
 
     if (existingItemIndex > -1) {
-      cart.items[existingItemIndex].quantity += qty;
+      const newQty = cart.items[existingItemIndex].quantity + qty;
+
+      if (newQty > product.stock) {
+        return res.status(400).json({
+          message: `Cannot add more than available stock (${product.stock})`,
+        });
+      }
+
+      cart.items[existingItemIndex].quantity = newQty;
       cart.items[existingItemIndex].price = itemPrice;
-      cart.items[existingItemIndex].title = product.name || product.title || "Product";
+      cart.items[existingItemIndex].title = product.name || "Product";
       cart.items[existingItemIndex].image = product.image || "";
       cart.items[existingItemIndex].seller = product?.seller?.name || "";
     } else {
       cart.items.push({
         product: product._id,
-        title: product.name || product.title || "Product",
+        title: product.name || "Product",
         image: product.image || "",
         price: itemPrice,
         quantity: qty,
@@ -108,7 +124,21 @@ export const updateCartItemQuantity = async (req, res) => {
       return res.status(404).json({ message: "Cart item not found" });
     }
 
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (qty > product.stock) {
+      return res.status(400).json({
+        message: `Only ${product.stock} item(s) available in stock`,
+      });
+    }
+
     item.quantity = qty;
+    item.price = parsePrice(item.price || product.price);
+
     await cart.save();
 
     res.status(200).json({

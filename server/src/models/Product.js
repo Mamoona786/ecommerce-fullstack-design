@@ -29,15 +29,23 @@ const sellerSchema = new mongoose.Schema(
 
 const productSchema = new mongoose.Schema(
   {
-    // Minimum required fields
     name: { type: String, required: true, trim: true },
+
     price: { type: Number, required: true, min: 0 },
-    image: { type: String, required: true },
+
+    // frontend bucket upload ke baad jo signed/public URL milega woh yahan save hoga
+    image: { type: String, required: true, trim: true },
+
     description: { type: String, required: true, default: "" },
-    category: { type: String, required: true, default: "General" },
+
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
+
     stock: { type: Number, required: true, default: 0, min: 0 },
 
-    // Useful extra fields
     oldPrice: { type: Number, default: 0 },
     thumbnails: [{ type: String }],
     shortDescription: { type: String, default: "" },
@@ -78,12 +86,10 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-// Virtual id field for frontend convenience
 productSchema.virtual("id").get(function () {
   return this._id.toHexString();
 });
 
-// Automatically update stockStatus based on stock
 productSchema.pre("save", function (next) {
   if (this.stock <= 0) {
     this.stockStatus = "Out of stock";

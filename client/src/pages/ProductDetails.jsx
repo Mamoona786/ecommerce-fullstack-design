@@ -93,6 +93,8 @@ function ProductDetails() {
     return Number(product.priceTiers[selectedTierIndex]?.price || product.price || 0);
   }, [product, selectedTierIndex]);
 
+  const categoryName = product?.category?.category_name || "";
+
   const breadcrumbItems = useMemo(() => {
     if (!product) {
       return [
@@ -104,13 +106,17 @@ function ProductDetails() {
     return [
       { label: "Home", to: "/" },
       { label: "Products", to: "/products" },
-      {
-        label: product.category || "Category",
-        to: `/products?category=${encodeURIComponent(product.category || "")}`,
-      },
+      ...(categoryName
+        ? [
+            {
+              label: categoryName,
+              to: `/products?category=${encodeURIComponent(categoryName)}`,
+            },
+          ]
+        : []),
       { label: product.name },
     ];
-  }, [product]);
+  }, [product, categoryName]);
 
   const maxQty = useMemo(() => {
     const stock = Number(product?.stock || 0);
@@ -125,74 +131,74 @@ function ProductDetails() {
   };
 
   const handleAddToCart = async () => {
-  if (!product) return;
+    if (!product) return;
 
-  if (Number(product.stock || 0) <= 0) {
-    alert("This product is out of stock.");
-    return;
-  }
-
-  if (quantity > Number(product.stock || 0)) {
-    alert(`Only ${product.stock} item(s) available in stock.`);
-    return;
-  }
-
-  try {
-    if (isAuthenticated) {
-      await addToCart({
-        productId: product._id,
-        quantity,
-        selectedTierPrice,
-      });
-    } else {
-      addCartItem({
-        product,
-        quantity,
-        selectedTierPrice,
-      });
+    if (Number(product.stock || 0) <= 0) {
+      alert("This product is out of stock.");
+      return;
     }
 
-    alert("Product added to cart successfully!");
-  } catch (error) {
-    console.error("Failed to add product to cart:", error);
-    alert(error?.response?.data?.message || "Failed to add product to cart");
-  }
-};
+    if (quantity > Number(product.stock || 0)) {
+      alert(`Only ${product.stock} item(s) available in stock.`);
+      return;
+    }
+
+    try {
+      if (isAuthenticated) {
+        await addToCart({
+          productId: product._id,
+          quantity,
+          selectedTierPrice,
+        });
+      } else {
+        addCartItem({
+          product,
+          quantity,
+          selectedTierPrice,
+        });
+      }
+
+      alert("Product added to cart successfully!");
+    } catch (error) {
+      console.error("Failed to add product to cart:", error);
+      alert(error?.response?.data?.message || "Failed to add product to cart");
+    }
+  };
 
   const handleBuyNow = async () => {
-  if (!product) return;
+    if (!product) return;
 
-  if (Number(product.stock || 0) <= 0) {
-    alert("This product is out of stock.");
-    return;
-  }
-
-  if (quantity > Number(product.stock || 0)) {
-    alert(`Only ${product.stock} item(s) available in stock.`);
-    return;
-  }
-
-  try {
-    if (isAuthenticated) {
-      await addToCart({
-        productId: product._id,
-        quantity,
-        selectedTierPrice,
-      });
-    } else {
-      addCartItem({
-        product,
-        quantity,
-        selectedTierPrice,
-      });
+    if (Number(product.stock || 0) <= 0) {
+      alert("This product is out of stock.");
+      return;
     }
 
-    navigate("/cart");
-  } catch (error) {
-    console.error("Failed to buy product now:", error);
-    alert(error?.response?.data?.message || "Failed to add product to cart");
-  }
-};
+    if (quantity > Number(product.stock || 0)) {
+      alert(`Only ${product.stock} item(s) available in stock.`);
+      return;
+    }
+
+    try {
+      if (isAuthenticated) {
+        await addToCart({
+          productId: product._id,
+          quantity,
+          selectedTierPrice,
+        });
+      } else {
+        addCartItem({
+          product,
+          quantity,
+          selectedTierPrice,
+        });
+      }
+
+      navigate("/cart");
+    } catch (error) {
+      console.error("Failed to buy product now:", error);
+      alert(error?.response?.data?.message || "Failed to add product to cart");
+    }
+  };
 
   const handleSendInquiry = () => {
     if (!product?.seller?.name) return;
