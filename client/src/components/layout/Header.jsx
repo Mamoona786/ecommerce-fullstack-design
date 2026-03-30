@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FaUser,
@@ -19,10 +19,25 @@ const Header = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const syncUser = () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (error) {
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+
+    syncUser();
+    window.addEventListener("storage", syncUser);
+
+    return () => {
+      window.removeEventListener("storage", syncUser);
+    };
   }, []);
 
   const handleSearch = (e) => {
@@ -41,6 +56,8 @@ const Header = () => {
     setUser(null);
     navigate("/login");
   };
+
+  const isAdmin = user?.role === "admin";
 
   return (
     <header className="header">
@@ -86,23 +103,19 @@ const Header = () => {
         <div className="top-icons">
           {user ? (
             <>
-              <button
-                className="icon-item icon-item-button"
-                type="button"
-              >
+              <button className="icon-item icon-item-button" type="button">
                 <FaUser className="icon" />
                 <span className="icon-label">
-                  {user.username || "Profile"}
+                  {user.username || (isAdmin ? "Admin" : "Profile")}
                 </span>
               </button>
 
-              <button
-                className="icon-item icon-item-button"
-                type="button"
-              >
-                <FaBoxOpen className="icon" />
-                <span className="icon-label">Orders</span>
-              </button>
+              {!isAdmin && (
+                <button className="icon-item icon-item-button" type="button">
+                  <FaBoxOpen className="icon" />
+                  <span className="icon-label">Orders</span>
+                </button>
+              )}
 
               <button
                 className="icon-item icon-item-button"
@@ -120,15 +133,19 @@ const Header = () => {
             </Link>
           )}
 
-          <button className="icon-item icon-item-button" type="button">
-            <FaRegCommentDots className="icon" />
-            <span className="icon-label">Message</span>
-          </button>
+          {!isAdmin && (
+            <>
+              <button className="icon-item icon-item-button" type="button">
+                <FaRegCommentDots className="icon" />
+                <span className="icon-label">Message</span>
+              </button>
 
-          <Link to="/cart" className="icon-item">
-            <FaShoppingCart className="icon" />
-            <span className="icon-label">My cart</span>
-          </Link>
+              <Link to="/cart" className="icon-item">
+                <FaShoppingCart className="icon" />
+                <span className="icon-label">My cart</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

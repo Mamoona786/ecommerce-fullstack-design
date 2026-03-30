@@ -1,0 +1,138 @@
+.admin-dashboard-page {
+  width: 100%;
+}
+
+.admin-dashboard-header {
+  margin-bottom: 24px;
+}
+
+.admin-dashboard-header h1 {
+  font-size: 30px;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+.admin-dashboard-header p {
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.admin-dashboard-error {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.admin-dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.admin-dashboard-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+  border: 1px solid #edf0f5;
+}
+
+.admin-dashboard-card h3 {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.admin-dashboard-card p {
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.admin-dashboard-section {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 24px rgba(17, 24, 39, 0.06);
+  border: 1px solid #edf0f5;
+}
+
+.admin-dashboard-section-full {
+  grid-column: 1 / -1;
+}
+
+.admin-dashboard-section h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.admin-dashboard-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-dashboard-table th,
+.admin-dashboard-table td {
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 1px solid #eef2f7;
+  font-size: 14px;
+}
+
+.admin-dashboard-table th {
+  color: #374151;
+  background: #f9fbfd;
+  font-weight: 700;
+}
+
+.admin-dashboard-table td {
+  color: #1f2937;
+}
+
+@media (max-width: 1200px) {
+  .admin-dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard-section-full {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .admin-layout-content {
+    padding: 18px;
+  }
+
+  .admin-dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+}
