@@ -1,13 +1,21 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../layout/AdminLayout";
+import { createAdminUser } from "../../../services/adminService";
 
 const AddUser = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
     role: "user",
   });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -16,9 +24,42 @@ const AddUser = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const resetForm = () => {
+    setFormData({
+      username: "",
+      email: "",
+      password: "",
+      role: "user",
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Add User API will be connected here.");
+
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+
+      await createAdminUser({
+        username: formData.username.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+        role: formData.role,
+      });
+
+      setSuccess("User created successfully");
+      resetForm();
+
+      setTimeout(() => {
+        navigate("/admin/users/view");
+      }, 1000);
+    } catch (err) {
+      console.error("Failed to create user:", err);
+      setError(err.response?.data?.message || "Failed to create user");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,6 +80,7 @@ const AddUser = () => {
                 value={formData.username}
                 onChange={handleChange}
                 style={inputStyle}
+                placeholder="Enter username"
               />
             </div>
 
@@ -50,6 +92,7 @@ const AddUser = () => {
                 value={formData.email}
                 onChange={handleChange}
                 style={inputStyle}
+                placeholder="Enter email address"
               />
             </div>
 
@@ -61,6 +104,7 @@ const AddUser = () => {
                 value={formData.password}
                 onChange={handleChange}
                 style={inputStyle}
+                placeholder="Enter password"
               />
             </div>
 
@@ -77,8 +121,20 @@ const AddUser = () => {
               </select>
             </div>
 
-            <button type="submit" style={buttonStyle}>
-              Save User
+            {error && (
+              <p style={{ color: "#dc2626", margin: 0, fontWeight: "500" }}>
+                {error}
+              </p>
+            )}
+
+            {success && (
+              <p style={{ color: "#16a34a", margin: 0, fontWeight: "500" }}>
+                {success}
+              </p>
+            )}
+
+            <button type="submit" style={buttonStyle} disabled={loading}>
+              {loading ? "Saving..." : "Save User"}
             </button>
           </form>
         </section>

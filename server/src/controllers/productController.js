@@ -105,3 +105,80 @@ export const getProductById = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch product" });
   }
 };
+
+export const createProduct = async (req, res) => {
+  try {
+    const {
+      name,
+      price,
+      image,
+      description,
+      category,
+      stock,
+      brand,
+      shortDescription,
+      subCategory,
+    } = req.body;
+
+    if (!name?.trim()) {
+      return res.status(400).json({ message: "Product name is required" });
+    }
+
+    if (!image?.trim()) {
+      return res.status(400).json({ message: "Product image is required" });
+    }
+
+    if (!description?.trim()) {
+      return res.status(400).json({ message: "Product description is required" });
+    }
+
+    if (!category) {
+      return res.status(400).json({ message: "Category is required" });
+    }
+
+    if (Number(price) < 0) {
+      return res.status(400).json({ message: "Price cannot be negative" });
+    }
+
+    if (Number(stock) < 0) {
+      return res.status(400).json({ message: "Stock cannot be negative" });
+    }
+
+    const existingCategory = await Category.findById(category);
+    if (!existingCategory) {
+      return res.status(404).json({ message: "Selected category not found" });
+    }
+
+    const product = await Product.create({
+      name: name.trim(),
+      price: Number(price || 0),
+      image: image.trim(),
+      description: description.trim(),
+      category,
+      stock: Number(stock || 0),
+      brand: brand?.trim() || "",
+      shortDescription: shortDescription?.trim() || "",
+      subCategory: subCategory?.trim() || "",
+      seller: {
+        name: "Admin Store",
+        location: "Pakistan",
+        verified: true,
+        shipping: "Worldwide shipping",
+        logoLetter: "A",
+      },
+    });
+
+    const populatedProduct = await Product.findById(product._id).populate(
+      "category",
+      "category_name description"
+    );
+
+    res.status(201).json({
+      message: "Product created successfully",
+      product: populatedProduct,
+    });
+  } catch (error) {
+    console.error("Failed to create product:", error.message);
+    res.status(500).json({ message: "Failed to create product" });
+  }
+};

@@ -1,11 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../layout/AdminLayout";
+import { createCategory } from "../../../services/categoryService";
 
 const AddCategory = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     category_name: "",
     description: "",
   });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -14,9 +22,38 @@ const AddCategory = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const resetForm = () => {
+    setFormData({
+      category_name: "",
+      description: "",
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Add Category API will be connected here.");
+
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+
+      await createCategory({
+        category_name: formData.category_name.trim(),
+        description: formData.description.trim(),
+      });
+
+      setSuccess("Category created successfully");
+      resetForm();
+
+      setTimeout(() => {
+        navigate("/admin/categories/view");
+      }, 1000);
+    } catch (err) {
+      console.error("Failed to create category:", err);
+      setError(err.response?.data?.message || "Failed to create category");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,6 +74,7 @@ const AddCategory = () => {
                 value={formData.category_name}
                 onChange={handleChange}
                 style={inputStyle}
+                placeholder="Enter category name"
               />
             </div>
 
@@ -48,11 +86,24 @@ const AddCategory = () => {
                 onChange={handleChange}
                 rows="5"
                 style={inputStyle}
+                placeholder="Enter category description"
               />
             </div>
 
-            <button type="submit" style={buttonStyle}>
-              Save Category
+            {error && (
+              <p style={{ color: "#dc2626", margin: 0, fontWeight: "500" }}>
+                {error}
+              </p>
+            )}
+
+            {success && (
+              <p style={{ color: "#16a34a", margin: 0, fontWeight: "500" }}>
+                {success}
+              </p>
+            )}
+
+            <button type="submit" style={buttonStyle} disabled={loading}>
+              {loading ? "Saving..." : "Save Category"}
             </button>
           </form>
         </section>
