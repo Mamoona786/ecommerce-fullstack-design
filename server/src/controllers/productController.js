@@ -82,9 +82,9 @@ export const getProducts = async (req, res) => {
       totalPages: Math.ceil(total / pageLimit),
     });
   } catch (error) {
-    console.error("Failed to fetch products:", error.message);
-    res.status(500).json({ message: "Failed to fetch products" });
-  }
+  console.error("Error:", error);
+  res.status(500).json({ message: error.message });
+}
 };
 
 export const getProductById = async (req, res) => {
