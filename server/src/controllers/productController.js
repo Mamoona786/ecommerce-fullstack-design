@@ -1,3 +1,4 @@
+import connectDB from "../config/db.js";
 import Product from "../models/Product.js";
 import Category from "../models/Category.js";
 
@@ -23,6 +24,7 @@ const parseSortOption = (sort) => {
 };
 
 export const getProducts = async (req, res) => {
+  await connectDB();
   try {
     const {
       search = "",

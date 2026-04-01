@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import connectDB from "./config/db.js";
 
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
@@ -22,17 +21,6 @@ app.use(
 );
 
 app.use(express.json());
-
-// DB middleware
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (error) {
-    console.error("DB middleware error:", error.message);
-    res.status(500).json({ message: "Database connection failed" });
-  }
-});
 
 app.get("/", (req, res) => {
   res.json({ message: "API is running" });
