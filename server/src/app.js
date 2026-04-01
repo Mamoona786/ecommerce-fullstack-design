@@ -14,17 +14,25 @@ dotenv.config();
 
 const app = express();
 
-// DB connection
-connectDB();
-
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin: process.env.CLIENT_URL || true,
     credentials: true,
   })
 );
 
 app.use(express.json());
+
+// DB middleware
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("DB middleware error:", error.message);
+    res.status(500).json({ message: "Database connection failed" });
+  }
+});
 
 app.get("/", (req, res) => {
   res.json({ message: "API is running" });
