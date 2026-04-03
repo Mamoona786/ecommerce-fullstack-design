@@ -10,7 +10,7 @@ import {
   replyAsAdmin,
   updateChatStatus,
 } from "../controllers/chatController.js";
-import { adminOnly } from "../middleware/adminMiddleware.js";
+import adminOnly from "../middleware/adminMiddleware.js";
 
 const router = express.Router();
 
