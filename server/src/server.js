@@ -12,7 +12,7 @@ dotenv.config({
 
 const PORT = process.env.PORT || 5000;
 
-console.log("OPENAI_API_KEY loaded:", !!process.env.OPENAI_API_KEY);
+console.log("GEMINI_API_KEY loaded:", !!process.env.GEMINI_API_KEY);
 console.log("CLIENT_URL:", process.env.CLIENT_URL);
 
 connectDB();

@@ -1,9 +1,9 @@
 import Chat from "../models/Chat.js";
 import Order from "../models/Order.js";
 import User from "../models/User.js";
-import { generateSupportReply } from "../services/openaiService.js";
+// import { generateSupportReply } from "../services/openaiService.js";
 import { buildOrderSummary, buildUserSummary } from "../utils/chatPromptBuilder.js";
-
+import { generateSupportReply } from "../services/openaiService.js";
 export const createOrGetMyChat = async (req, res) => {
   try {
     let chat = await Chat.findOne({ user: req.user._id, status: { $ne: "resolved" } })
@@ -86,23 +86,35 @@ export const sendMessageToChat = async (req, res) => {
     chat.lastMessageAt = new Date();
     await chat.save();
 
-    let assistantReply = "Thanks for your message. A support reply is not available right now.";
+    let assistantReply =
+      "Thanks for your message. AI support is temporarily unavailable right now. A human admin can review your chat.";
 
     if (chat.aiEnabled) {
-      const user = await User.findById(req.user._id).select("_id username email role");
-      const orders = await Order.find({ user: req.user._id })
-        .sort({ createdAt: -1 })
-        .limit(5);
+      try {
+        const user = await User.findById(req.user._id).select(
+          "_id username email role"
+        );
 
-      assistantReply = await generateSupportReply({
-        userMessage: text.trim(),
-        recentMessages: chat.messages.slice(-8).map((m) => ({
-          sender: m.sender,
-          text: m.text,
-        })),
-        orderSummary: buildOrderSummary(orders),
-        userSummary: buildUserSummary(user),
-      });
+        const orders = await Order.find({ user: req.user._id })
+          .sort({ createdAt: -1 })
+          .limit(5);
+
+        assistantReply = await generateSupportReply({
+          userMessage: text.trim(),
+          recentMessages: chat.messages.slice(-8).map((m) => ({
+            sender: m.sender,
+            text: m.text,
+          })),
+          orderSummary: buildOrderSummary(orders),
+          userSummary: buildUserSummary(user),
+        });
+      } catch (error) {
+        console.error("Gemini reply failed:");
+console.error("message:", error?.message);
+console.error("status:", error?.status);
+console.error("code:", error?.code);
+console.error("details:", error?.errorDetails || error?.details || error);
+      }
     }
 
     chat.messages.push({

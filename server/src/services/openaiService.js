@@ -1,15 +1,13 @@
-import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 
-const getOpenAIClient = () => {
-  const apiKey = process.env.OPENAI_API_KEY;
+const getClient = () => {
+  const apiKey = process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is missing from environment variables");
+    throw new Error("GEMINI_API_KEY is missing from environment variables");
   }
 
-  return new OpenAI({
-    apiKey,
-  });
+  return new GoogleGenAI({ apiKey });
 };
 
 export const generateSupportReply = async ({
@@ -18,40 +16,37 @@ export const generateSupportReply = async ({
   orderSummary = null,
   userSummary = null,
 }) => {
-  const client = getOpenAIClient();
+  const ai = getClient();
 
-  const developerInstruction = `
+  const prompt = `
 You are an e-commerce customer support assistant.
-Be concise, helpful, and accurate.
-Never invent order status, payment status, refund policy, or delivery dates.
-Only use the provided store context.
-If store context is missing, ask a short follow-up question.
-If the user asks for escalation, say that human support can review the chat.
+
+Rules:
+- Be concise, helpful, and accurate.
+- Never invent order status, payment status, refund policy, or delivery dates.
+- Only use the provided store context.
+- If store context is missing, ask a short follow-up question.
+- If the user asks for escalation, say that human support can review the chat.
+
+Store context:
+${JSON.stringify(
+  {
+    userSummary,
+    orderSummary,
+    recentMessages,
+  },
+  null,
+  2
+)}
+
+User message:
+${userMessage}
 `;
 
-  const contextText = JSON.stringify(
-    {
-      userSummary,
-      orderSummary,
-      recentMessages,
-    },
-    null,
-    2
-  );
-
-  const response = await client.responses.create({
-    model: process.env.OPENAI_MODEL || "gpt-4.1-mini",
-    input: [
-      {
-        role: "developer",
-        content: developerInstruction,
-      },
-      {
-        role: "user",
-        content: `Store context:\n${contextText}\n\nUser message:\n${userMessage}`,
-      },
-    ],
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: prompt,
   });
 
-  return response.output_text || "I’m sorry, I could not generate a reply right now.";
+  return response.text || "I’m sorry, I could not generate a reply right now.";
 };
