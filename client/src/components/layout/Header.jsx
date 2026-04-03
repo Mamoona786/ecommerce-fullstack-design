@@ -103,7 +103,8 @@ const Header = () => {
         <div className="top-icons">
           {user ? (
             <>
-              <button className="icon-item icon-item-button" type="button">
+              <button className="icon-item icon-item-button" type="button"
+              onClick={() => navigate("/")}>
                 <FaUser className="icon" />
                 <span className="icon-label">
                   {user.username || (isAdmin ? "Admin" : "Profile")}
@@ -111,11 +112,15 @@ const Header = () => {
               </button>
 
               {!isAdmin && (
-                <button className="icon-item icon-item-button" type="button">
-                  <FaBoxOpen className="icon" />
-                  <span className="icon-label">Orders</span>
-                </button>
-              )}
+  <button
+    className="icon-item icon-item-button"
+    type="button"
+    onClick={() => navigate("/my-orders")}
+  >
+    <FaBoxOpen className="icon" />
+    <span className="icon-label">Orders</span>
+  </button>
+)}
 
               <button
                 className="icon-item icon-item-button"
@@ -135,7 +140,8 @@ const Header = () => {
 
           {!isAdmin && (
             <>
-              <button className="icon-item icon-item-button" type="button">
+              <button className="icon-item icon-item-button" type="button"
+              onClick={() => navigate("/messages")}>
                 <FaRegCommentDots className="icon" />
                 <span className="icon-label">Message</span>
               </button>

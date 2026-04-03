@@ -113,6 +113,62 @@ export const addToCart = async (req, res) => {
   }
 };
 
+export const mergeGuestCart = async (req, res) => {
+  try {
+    const incomingItems = Array.isArray(req.body.items) ? req.body.items : [];
+    const cart = await getOrCreateCart(req.user._id);
+
+    for (const incomingItem of incomingItems) {
+      const productId = incomingItem.product || incomingItem.id;
+      const qty = Number(incomingItem.quantity || 0);
+      const selectedPrice = parsePrice(incomingItem.price);
+
+      if (!productId || qty < 1) {
+        continue;
+      }
+
+      const product = await Product.findById(productId);
+
+      if (!product || product.stock <= 0) {
+        continue;
+      }
+
+      const existingItemIndex = cart.items.findIndex(
+        (item) => String(item.product) === String(product._id)
+      );
+
+      if (existingItemIndex > -1) {
+        const mergedQty = cart.items[existingItemIndex].quantity + qty;
+        cart.items[existingItemIndex].quantity = Math.min(mergedQty, product.stock);
+        cart.items[existingItemIndex].price = selectedPrice || parsePrice(product.price);
+        cart.items[existingItemIndex].title = product.name || "Product";
+        cart.items[existingItemIndex].image = product.image || "";
+        cart.items[existingItemIndex].seller = product?.seller?.name || "";
+      } else {
+        cart.items.push({
+          product: product._id,
+          title: product.name || "Product",
+          image: product.image || "",
+          price: selectedPrice || parsePrice(product.price),
+          quantity: Math.min(qty, product.stock),
+          seller: product?.seller?.name || "",
+        });
+      }
+    }
+
+    await cart.save();
+    const populatedCart = await populateCart(cart._id);
+
+    res.status(200).json({
+      message: "Guest cart merged successfully",
+      cart: populatedCart,
+    });
+  } catch (error) {
+    console.error("Failed to merge guest cart:", error.message);
+    res.status(500).json({ message: error.message || "Failed to merge guest cart" });
+  }
+};
+
 export const updateCartItemQuantity = async (req, res) => {
   try {
     const { productId } = req.params;

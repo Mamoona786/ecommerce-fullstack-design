@@ -5,6 +5,12 @@ import ProductDetails from "../pages/ProductDetails";
 import Cart from "../pages/Cart";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Checkout from "../pages/Checkout";
+import Payment from "../pages/Payment";
+import OrderConfirmation from "../pages/OrderConfirmation";
+import MyOrders from "../pages/MyOrders";
+import OrderDetails from "../pages/OrderDetails";
+import Messages from "../pages/Messages";
 
 import AdminRoute from "../components/common/AdminRoute";
 
@@ -35,6 +41,12 @@ function AppRoutes() {
       <Route path="/products" element={<Products />} />
       <Route path="/products/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/payment" element={<Payment />} />
+      <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+      <Route path="/my-orders" element={<MyOrders />} />
+      <Route path="/orders/:orderId" element={<OrderDetails />} />
+      <Route path="/messages" element={<Messages />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 

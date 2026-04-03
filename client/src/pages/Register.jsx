@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff, FiMail } from "react-icons/fi";
 import "../styles/register.css";
 import { registerUser } from "../services/authService";
@@ -8,6 +8,11 @@ const registerHeroImg = "/login-hero.png";
 
 const Register = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/";
+  const checkoutIntent = location.state?.checkoutIntent || false;
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -27,24 +32,27 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    setLoading(true);
-    setError("");
+    try {
+      setLoading(true);
+      setError("");
 
-    const data = await registerUser(formData);
+      await registerUser(formData);
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-
-    navigate("/");
-  } catch (err) {
-    setError(err.response?.data?.message || "Registration failed");
-  } finally {
-    setLoading(false);
-  }
-};
+      navigate("/login", {
+        replace: true,
+        state: {
+          from,
+          checkoutIntent,
+        },
+      });
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="register-page">
@@ -149,7 +157,16 @@ const Register = () => {
               </button>
 
               <p className="register-login-text">
-                Already have an account? <Link to="/login">Login</Link>
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  state={{
+                    from,
+                    checkoutIntent,
+                  }}
+                >
+                  Login
+                </Link>
               </p>
             </form>
           </div>

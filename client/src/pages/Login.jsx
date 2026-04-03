@@ -1,13 +1,20 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import "../styles/login.css";
 import { loginUser } from "../services/authService";
+import { mergeGuestCart } from "../services/cartService";
+import { getCartItems, clearCart } from "../utils/cartHelpers";
 
 const loginHeroImg = "/login-hero.png";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from || "/";
+  const checkoutIntent = location.state?.checkoutIntent || false;
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -26,28 +33,46 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    setLoading(true);
-    setError("");
+    try {
+      setLoading(true);
+      setError("");
 
-    const data = await loginUser(formData);
+      const data = await loginUser(formData);
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-    if (data.user?.role === "admin") {
-      navigate("/admin");
-    } else {
-      navigate("/");
+      const guestCartItems = getCartItems();
+
+      if (guestCartItems.length > 0 && data.user?.role !== "admin") {
+        await mergeGuestCart(guestCartItems);
+        clearCart();
+      }
+
+      if (data.user?.role === "admin") {
+        navigate("/admin", { replace: true });
+        return;
+      }
+
+      if (checkoutIntent) {
+        navigate("/cart", {
+          replace: true,
+          state: {
+            message: "Login successful. Your cart is ready. Please continue checkout.",
+          },
+        });
+        return;
+      }
+
+      navigate(from, { replace: true });
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError(err.response?.data?.message || "Login failed");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="login-page">
@@ -116,7 +141,16 @@ const Login = () => {
               </button>
 
               <p className="register-text">
-                Don&apos;t have an account? <Link to="/register">Register</Link>
+                Don&apos;t have an account?{" "}
+                <Link
+                  to="/register"
+                  state={{
+                    from,
+                    checkoutIntent,
+                  }}
+                >
+                  Register
+                </Link>
               </p>
             </form>
           </div>

@@ -34,6 +34,65 @@ const orderItemSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const shippingAddressSchema = new mongoose.Schema(
+  {
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    address: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    city: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    postalCode: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    country: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  },
+  { _id: false }
+);
+
+const paymentInfoSchema = new mongoose.Schema(
+  {
+    method: {
+      type: String,
+      enum: ["cod", "card", "paypal"],
+      required: true,
+      default: "cod",
+    },
+    status: {
+      type: String,
+      enum: ["pending", "paid", "failed"],
+      default: "pending",
+    },
+  },
+  { _id: false }
+);
+
 const orderSchema = new mongoose.Schema(
   {
     user: {
@@ -41,7 +100,19 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
     items: [orderItemSchema],
+
+    shippingAddress: {
+      type: shippingAddressSchema,
+      required: true,
+    },
+
+    paymentInfo: {
+      type: paymentInfoSchema,
+      required: true,
+    },
+
     subtotal: {
       type: Number,
       required: true,
@@ -62,6 +133,7 @@ const orderSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+
     status: {
       type: String,
       enum: ["pending", "paid", "processing", "shipped", "delivered", "cancelled"],
