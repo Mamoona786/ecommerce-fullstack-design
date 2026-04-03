@@ -1,33 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/layout/Header";
 import FooterSection from "../components/common/FooterSection";
-import { generateAutoReply } from "../services/messageService";
+import {
+  createOrGetMyChat,
+  sendMessageToChat,
+} from "../services/messageService";
 
 function Messages() {
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      sender: "bot",
-      text: "Hello! Welcome to customer support. How can I help you today?",
-    },
-  ]);
+  const [chat, setChat] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
-  const init = async () => {
-    const data = await createOrGetMyChat();
-    setChat(data.chat);
-  };
-  init();
-}, []);
+    const init = async () => {
+      try {
+        setLoading(true);
+        const data = await createOrGetMyChat();
+        setChat(data.chat);
+      } catch (error) {
+        console.error("Failed to load chat:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-const handleSend = async () => {
-  const data = await sendMessageToChat(chat._id, input);
-  setChat(data.chat);
-  setInput("");
-};
+    init();
+  }, []);
+
+  const handleSend = async (e) => {
+    e.preventDefault();
+
+    if (!chat?._id || !input.trim()) return;
+
+    try {
+      setSending(true);
+      const data = await sendMessageToChat(chat._id, input.trim());
+      setChat(data.chat);
+      setInput("");
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      alert(error?.response?.data?.message || "Failed to send message");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const messages = chat?.messages || [];
 
   return (
-    <div className="messages-page" style={{ minHeight: "100vh", background: "#f8f9fa" }}>
+    <div
+      className="messages-page"
+      style={{ minHeight: "100vh", background: "#f8f9fa" }}
+    >
       <Header />
 
       <main style={{ padding: "30px 0" }}>
@@ -70,30 +95,38 @@ const handleSend = async () => {
                 background: "#f9fafb",
               }}
             >
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    justifyContent: msg.sender === "user" ? "flex-end" : "flex-start",
-                    marginBottom: "14px",
-                  }}
-                >
+              {loading ? (
+                <p>Loading chat...</p>
+              ) : messages.length === 0 ? (
+                <p>No messages yet.</p>
+              ) : (
+                messages.map((msg) => (
                   <div
+                    key={msg._id}
                     style={{
-                      maxWidth: "70%",
-                      padding: "12px 16px",
-                      borderRadius: "14px",
-                      background: msg.sender === "user" ? "#2563eb" : "#ffffff",
-                      color: msg.sender === "user" ? "#ffffff" : "#1f2937",
-                      border: msg.sender === "bot" ? "1px solid #e5e7eb" : "none",
-                      lineHeight: "1.5",
+                      display: "flex",
+                      justifyContent:
+                        msg.sender === "user" ? "flex-end" : "flex-start",
+                      marginBottom: "14px",
                     }}
                   >
-                    {msg.text}
+                    <div
+                      style={{
+                        maxWidth: "70%",
+                        padding: "12px 16px",
+                        borderRadius: "14px",
+                        background: msg.sender === "user" ? "#2563eb" : "#ffffff",
+                        color: msg.sender === "user" ? "#ffffff" : "#1f2937",
+                        border:
+                          msg.sender !== "user" ? "1px solid #e5e7eb" : "none",
+                        lineHeight: "1.5",
+                      }}
+                    >
+                      {msg.text}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
 
             <form
@@ -124,6 +157,7 @@ const handleSend = async () => {
 
               <button
                 type="submit"
+                disabled={sending}
                 style={{
                   border: "none",
                   borderRadius: "10px",
@@ -134,7 +168,7 @@ const handleSend = async () => {
                   cursor: "pointer",
                 }}
               >
-                Send
+                {sending ? "Sending..." : "Send"}
               </button>
             </form>
           </div>

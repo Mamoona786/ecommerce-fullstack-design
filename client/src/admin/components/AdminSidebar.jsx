@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 import "../styles/adminSidebar.css";
 import { useNavigate } from "react-router-dom";
+import { FaHeadset } from "react-icons/fa";
 
 const AdminSidebar = () => {
   const location = useLocation();
@@ -225,6 +226,18 @@ const handleLogout = () => {
             <span>Orders</span>
           </span>
         </Link>
+
+        <Link
+  to="/admin/support"
+  className={`admin-sidebar-item ${
+    isActive("/admin/support") ? "active-plain" : ""
+  }`}
+>
+  <span className="admin-sidebar-item-left">
+    <FaHeadset className="admin-sidebar-icon" />
+    <span>Support</span>
+  </span>
+</Link>
       </div>
 
       <div className="admin-sidebar-logout">

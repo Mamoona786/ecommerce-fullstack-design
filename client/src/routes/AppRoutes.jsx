@@ -11,7 +11,7 @@ import OrderConfirmation from "../pages/OrderConfirmation";
 import MyOrders from "../pages/MyOrders";
 import OrderDetails from "../pages/OrderDetails";
 import Messages from "../pages/Messages";
-
+import AdminSupport from "../admin/pages/AdminSupport";
 import AdminRoute from "../components/common/AdminRoute";
 
 import AdminDashboard from "../admin/pages/AdminDashboard";
@@ -70,6 +70,7 @@ function AppRoutes() {
 
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/admin/orders/edit/:id" element={<EditOrder />} />
+        <Route path="/admin/support" element={<AdminSupport />} />
       </Route>
     </Routes>
   );

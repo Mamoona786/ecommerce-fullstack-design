@@ -1,8 +1,16 @@
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const getOpenAIClient = () => {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY is missing from environment variables");
+  }
+
+  return new OpenAI({
+    apiKey,
+  });
+};
 
 export const generateSupportReply = async ({
   userMessage,
@@ -10,6 +18,8 @@ export const generateSupportReply = async ({
   orderSummary = null,
   userSummary = null,
 }) => {
+  const client = getOpenAIClient();
+
   const developerInstruction = `
 You are an e-commerce customer support assistant.
 Be concise, helpful, and accurate.
