@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import heroImg from "../../assets/hero-electronics.png";
 import { FaUserCircle } from "react-icons/fa";
-
-const heroImg = "/hero-electronics.png";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+
   const categories = [
     "Automobiles",
     "Clothes and wear",
@@ -20,6 +18,46 @@ const HeroSection = () => {
   ];
 
   const [activeCategory, setActiveCategory] = useState("Automobiles");
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+  {
+    id: 1,
+    image: "/hero-electronics.png",
+    smallText: "Latest trending",
+    title: "Electronic items",
+    buttonText: "Learn more",
+    link: "/products?category=Computer%20and%20tech",
+  },
+  {
+    id: 2,
+    image: "/gadgets.png",
+    smallText: "Best offers",
+    title: "Gadgets and devices",
+    buttonText: "Shop now",
+    link: "/products?section=electronics",
+  },
+  {
+    id: 3,
+    image: "/home.png",
+    smallText: "New arrivals",
+    title: (
+      <>
+        Home and <br /> outdoor
+      </>
+    ),
+    buttonText: "Explore",
+    link: "/products?section=home-outdoor",
+  },
+];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [slides.length]);
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
@@ -44,18 +82,45 @@ const HeroSection = () => {
       </div>
 
       <div className="banner-box">
-        <img src={heroImg} alt="Electronic items" className="banner-image" />
-
-        <div className="banner-overlay">
-          <p className="banner-small-text">Latest trending</p>
-          <h1 className="banner-title">Electronic items</h1>
-          <button
-            className="learn-more-btn"
-            type="button"
-            onClick={() => navigate("/products?category=Computer%20and%20tech")}
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={`banner-slide ${
+              index === currentSlide ? "banner-slide-active" : ""
+            }`}
           >
-            Learn more
-          </button>
+            <img
+              src={slide.image}
+              alt={slide.alt}
+              className="banner-slide-image"
+            />
+
+            <div className="banner-overlay">
+              <p className="banner-small-text">{slide.smallText}</p>
+              <h1 className="banner-title">{slide.title}</h1>
+              <button
+                className="learn-more-btn"
+                type="button"
+                onClick={() => navigate(slide.link)}
+              >
+                {slide.buttonText}
+              </button>
+            </div>
+          </div>
+        ))}
+
+        <div className="banner-dots">
+          {slides.map((slide, index) => (
+            <button
+              key={slide.id}
+              type="button"
+              className={`banner-dot ${
+                index === currentSlide ? "banner-dot-active" : ""
+              }`}
+              onClick={() => setCurrentSlide(index)}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
 

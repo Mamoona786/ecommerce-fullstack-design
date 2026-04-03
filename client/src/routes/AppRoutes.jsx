@@ -5,7 +5,13 @@ import ProductDetails from "../pages/ProductDetails";
 import Cart from "../pages/Cart";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-
+import Checkout from "../pages/Checkout";
+import Payment from "../pages/Payment";
+import OrderConfirmation from "../pages/OrderConfirmation";
+import MyOrders from "../pages/MyOrders";
+import OrderDetails from "../pages/OrderDetails";
+import Messages from "../pages/Messages";
+import AdminSupport from "../admin/pages/AdminSupport";
 import AdminRoute from "../components/common/AdminRoute";
 
 import AdminDashboard from "../admin/pages/AdminDashboard";
@@ -35,6 +41,12 @@ function AppRoutes() {
       <Route path="/products" element={<Products />} />
       <Route path="/products/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
+      <Route path="/payment" element={<Payment />} />
+      <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+      <Route path="/my-orders" element={<MyOrders />} />
+      <Route path="/orders/:orderId" element={<OrderDetails />} />
+      <Route path="/messages" element={<Messages />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
@@ -58,6 +70,7 @@ function AppRoutes() {
 
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/admin/orders/edit/:id" element={<EditOrder />} />
+        <Route path="/admin/support" element={<AdminSupport />} />
       </Route>
     </Routes>
   );

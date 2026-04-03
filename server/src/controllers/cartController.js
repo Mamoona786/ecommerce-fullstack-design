@@ -6,6 +6,13 @@ const parsePrice = (price) => {
   return Number(String(price || "").replace(/[^0-9.]/g, "")) || 0;
 };
 
+const populateCart = async (cartId) => {
+  return Cart.findById(cartId).populate({
+    path: "items.product",
+    select: "name image price stock stockStatus seller",
+  });
+};
+
 const getOrCreateCart = async (userId) => {
   let cart = await Cart.findOne({ user: userId });
 
@@ -23,10 +30,11 @@ const getOrCreateCart = async (userId) => {
 export const getMyCart = async (req, res) => {
   try {
     const cart = await getOrCreateCart(req.user._id);
+    const populatedCart = await populateCart(cart._id);
 
     res.status(200).json({
       message: "Cart fetched successfully",
-      cart,
+      cart: populatedCart,
     });
   } catch (error) {
     console.error("Failed to fetch cart:", error.message);
@@ -93,14 +101,71 @@ export const addToCart = async (req, res) => {
     }
 
     await cart.save();
+    const populatedCart = await populateCart(cart._id);
 
     res.status(200).json({
       message: "Product added to cart",
-      cart,
+      cart: populatedCart,
     });
   } catch (error) {
     console.error("Failed to add to cart:", error.message);
     res.status(500).json({ message: error.message || "Failed to add to cart" });
+  }
+};
+
+export const mergeGuestCart = async (req, res) => {
+  try {
+    const incomingItems = Array.isArray(req.body.items) ? req.body.items : [];
+    const cart = await getOrCreateCart(req.user._id);
+
+    for (const incomingItem of incomingItems) {
+      const productId = incomingItem.product || incomingItem.id;
+      const qty = Number(incomingItem.quantity || 0);
+      const selectedPrice = parsePrice(incomingItem.price);
+
+      if (!productId || qty < 1) {
+        continue;
+      }
+
+      const product = await Product.findById(productId);
+
+      if (!product || product.stock <= 0) {
+        continue;
+      }
+
+      const existingItemIndex = cart.items.findIndex(
+        (item) => String(item.product) === String(product._id)
+      );
+
+      if (existingItemIndex > -1) {
+        const mergedQty = cart.items[existingItemIndex].quantity + qty;
+        cart.items[existingItemIndex].quantity = Math.min(mergedQty, product.stock);
+        cart.items[existingItemIndex].price = selectedPrice || parsePrice(product.price);
+        cart.items[existingItemIndex].title = product.name || "Product";
+        cart.items[existingItemIndex].image = product.image || "";
+        cart.items[existingItemIndex].seller = product?.seller?.name || "";
+      } else {
+        cart.items.push({
+          product: product._id,
+          title: product.name || "Product",
+          image: product.image || "",
+          price: selectedPrice || parsePrice(product.price),
+          quantity: Math.min(qty, product.stock),
+          seller: product?.seller?.name || "",
+        });
+      }
+    }
+
+    await cart.save();
+    const populatedCart = await populateCart(cart._id);
+
+    res.status(200).json({
+      message: "Guest cart merged successfully",
+      cart: populatedCart,
+    });
+  } catch (error) {
+    console.error("Failed to merge guest cart:", error.message);
+    res.status(500).json({ message: error.message || "Failed to merge guest cart" });
   }
 };
 
@@ -140,10 +205,11 @@ export const updateCartItemQuantity = async (req, res) => {
     item.price = parsePrice(item.price || product.price);
 
     await cart.save();
+    const populatedCart = await populateCart(cart._id);
 
     res.status(200).json({
       message: "Cart item updated",
-      cart,
+      cart: populatedCart,
     });
   } catch (error) {
     console.error("Failed to update cart item:", error.message);
@@ -162,10 +228,11 @@ export const removeCartItem = async (req, res) => {
     );
 
     await cart.save();
+    const populatedCart = await populateCart(cart._id);
 
     res.status(200).json({
       message: "Cart item removed",
-      cart,
+      cart: populatedCart,
     });
   } catch (error) {
     console.error("Failed to remove cart item:", error.message);
@@ -178,10 +245,11 @@ export const clearMyCart = async (req, res) => {
     const cart = await getOrCreateCart(req.user._id);
     cart.items = [];
     await cart.save();
+    const populatedCart = await populateCart(cart._id);
 
     res.status(200).json({
       message: "Cart cleared",
-      cart,
+      cart: populatedCart,
     });
   } catch (error) {
     console.error("Failed to clear cart:", error.message);

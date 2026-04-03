@@ -9,11 +9,37 @@ const getStockStatus = (stock) => {
   return "In stock";
 };
 
+const validateShippingAddress = (shippingAddress = {}) => {
+  const { fullName, email, phone, address, city, postalCode, country } = shippingAddress;
+
+  return (
+    fullName?.trim() &&
+    email?.trim() &&
+    phone?.trim() &&
+    address?.trim() &&
+    city?.trim() &&
+    postalCode?.trim() &&
+    country?.trim()
+  );
+};
+
 export const checkoutCart = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
-    const { discount = 0 } = req.body;
+    const { discount = 0, shippingAddress, paymentMethod = "cod" } = req.body;
+
+    if (!validateShippingAddress(shippingAddress)) {
+      return res.status(400).json({
+        message: "Complete shipping information is required",
+      });
+    }
+
+    if (!["cod", "card", "paypal"].includes(paymentMethod)) {
+      return res.status(400).json({
+        message: "Invalid payment method",
+      });
+    }
 
     await session.startTransaction();
 
@@ -53,8 +79,11 @@ export const checkoutCart = async (req, res) => {
       0
     );
 
+    const parsedDiscount = Number(discount || 0);
     const tax = subtotal > 0 ? Math.round(subtotal * 0.05) : 0;
-    const total = subtotal - Number(discount || 0) + tax;
+    const total = subtotal - parsedDiscount + tax;
+
+    const isPaidMethod = paymentMethod === "card" || paymentMethod === "paypal";
 
     const order = await Order.create(
       [
@@ -68,11 +97,24 @@ export const checkoutCart = async (req, res) => {
             quantity: item.quantity,
             seller: item.seller,
           })),
+          shippingAddress: {
+            fullName: shippingAddress.fullName.trim(),
+            email: shippingAddress.email.trim().toLowerCase(),
+            phone: shippingAddress.phone.trim(),
+            address: shippingAddress.address.trim(),
+            city: shippingAddress.city.trim(),
+            postalCode: shippingAddress.postalCode.trim(),
+            country: shippingAddress.country.trim(),
+          },
+          paymentInfo: {
+            method: paymentMethod,
+            status: isPaidMethod ? "paid" : "pending",
+          },
           subtotal,
-          discount: Number(discount || 0),
+          discount: parsedDiscount,
           tax,
           total,
-          status: "pending",
+          status: isPaidMethod ? "paid" : "pending",
         },
       ],
       { session }
@@ -84,9 +126,13 @@ export const checkoutCart = async (req, res) => {
 
     await session.commitTransaction();
 
+    const createdOrder = await Order.findById(order[0]._id)
+      .populate("items.product", "name image stock")
+      .populate("user", "username email");
+
     res.status(201).json({
       message: "Order placed successfully",
-      order: order[0],
+      order: createdOrder,
     });
   } catch (error) {
     await session.abortTransaction();
@@ -97,5 +143,45 @@ export const checkoutCart = async (req, res) => {
     });
   } finally {
     session.endSession();
+  }
+};
+
+export const getOrderById = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate("items.product", "name image stock")
+      .populate("user", "username email");
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (String(order.user._id) !== String(req.user._id) && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Not authorized to view this order" });
+    }
+
+    res.status(200).json({
+      message: "Order fetched successfully",
+      order,
+    });
+  } catch (error) {
+    console.error("Failed to fetch order:", error.message);
+    res.status(500).json({ message: error.message || "Failed to fetch order" });
+  }
+};
+
+export const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.user._id })
+      .populate("items.product", "name image stock")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      message: "Orders fetched successfully",
+      orders,
+    });
+  } catch (error) {
+    console.error("Failed to fetch orders:", error.message);
+    res.status(500).json({ message: error.message || "Failed to fetch orders" });
   }
 };

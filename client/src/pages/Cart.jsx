@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import Header from "../components/layout/Header";
 
@@ -23,20 +23,19 @@ import {
   updateCartItemQty,
   removeCartItem,
   clearCart,
-  checkoutCart,
 } from "../services/cartService";
 
 import "../styles/cart.css";
 
 function Cart() {
   const navigate = useNavigate();
+  const location = useLocation();
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   const [cartItems, setCartItems] = useState([]);
   const [coupon, setCoupon] = useState("");
   const [discountValue, setDiscountValue] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [checkingOut, setCheckingOut] = useState(false);
 
   const normalizeCartItems = (items = []) => {
     return items.map((item) => {
@@ -93,6 +92,13 @@ function Cart() {
 
     loadCart();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (location.state?.message) {
+      alert(location.state.message);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const handleQuantityChange = async (id, value) => {
     try {
@@ -155,8 +161,13 @@ function Cart() {
   const handleCheckout = async () => {
     try {
       if (!isAuthenticated) {
-        alert("Please login first to place your order.");
-        navigate("/login");
+        alert("Please login first to continue.");
+        navigate("/login", {
+          state: {
+            from: "/cart",
+            checkoutIntent: true,
+          },
+        });
         return;
       }
 
@@ -178,18 +189,17 @@ function Cart() {
         return;
       }
 
-      setCheckingOut(true);
-      const data = await checkoutCart(discountValue);
-
-      alert(`Order placed successfully! Order ID: ${data?.order?._id || "N/A"}`);
-      setCartItems([]);
-      setCoupon("");
-      setDiscountValue(0);
+      navigate("/checkout", {
+        state: {
+          cartItems,
+          pricing,
+          discountValue,
+          coupon,
+        },
+      });
     } catch (error) {
-      console.error("Checkout failed:", error);
-      alert(error?.response?.data?.message || "Checkout failed");
-    } finally {
-      setCheckingOut(false);
+      console.error("Failed to continue checkout:", error);
+      alert("Unable to continue checkout");
     }
   };
 
@@ -272,7 +282,7 @@ function Cart() {
               <CartSummaryCard
                 pricing={pricing}
                 onCheckout={handleCheckout}
-                checkingOut={checkingOut}
+                checkingOut={false}
               />
             </aside>
           </div>

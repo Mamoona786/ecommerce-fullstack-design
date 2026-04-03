@@ -29,7 +29,30 @@ export const clearCart = async () => {
   return response.data;
 };
 
-export const checkoutCart = async (discount = 0) => {
-  const response = await api.post("/orders/checkout", { discount });
+export const mergeGuestCart = async (items = []) => {
+  const response = await api.post("/cart/merge", { items });
+  return response.data;
+};
+
+export const checkoutCart = async ({
+  discount = 0,
+  shippingAddress,
+  paymentMethod,
+}) => {
+  const response = await api.post("/orders/checkout", {
+    discount,
+    shippingAddress,
+    paymentMethod,
+  });
+  return response.data;
+};
+
+export const getOrderById = async (orderId) => {
+  const response = await api.get(`/orders/${orderId}`);
+  return response.data;
+};
+
+export const getMyOrders = async () => {
+  const response = await api.get("/orders/my-orders");
   return response.data;
 };

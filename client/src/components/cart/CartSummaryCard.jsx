@@ -36,13 +36,13 @@ function CartSummaryCard({ pricing, onCheckout, checkingOut = false }) {
       </div>
 
       <button
-        type="button"
-        className="cart-checkout-btn"
-        onClick={onCheckout}
-        disabled={checkingOut}
-      >
-        {checkingOut ? "Processing..." : "Checkout"}
-      </button>
+  type="button"
+  className="cart-checkout-btn"
+  onClick={onCheckout}
+  disabled={checkingOut}
+>
+  {checkingOut ? "Processing..." : "Proceed to Checkout"}
+</button>
 
       <div className="cart-payment-methods">
         <img src={americanExpress} alt="American Express" />
