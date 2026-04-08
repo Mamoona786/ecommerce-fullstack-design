@@ -70,7 +70,7 @@ The project is developed based on a Figma design and includes:
 ![Frontend 15](screenshots/frontend15.JPG)
 ![Frontend 16](screenshots/frontend16.JPG)
 ![Frontend 17](screenshots/frontend17.JPG)
-![Frontend 18](screenshots/frontend18.jpg)
+![Frontend 18](screenshots/frontend18.JPG)
 ![Frontend 19](screenshots/frontend19.JPG)
 ![Frontend 20](screenshots/frontend20.JPG)
 ![Frontend 21](screenshots/frontend21.JPG)
