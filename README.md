@@ -53,7 +53,7 @@ The project is developed based on a Figma design and includes:
 
 ### 🖥️ Frontend UI
 
-![Frontend 1](screenshots/frontend1.jpg)
+![Frontend 1](screenshots/frontend1.jpeg)
 ![Frontend 2](screenshots/frontend2.jpg)
 ![Frontend 3](screenshots/frontend3.jpg)
 ![Frontend 4](screenshots/frontend4.jpg)
